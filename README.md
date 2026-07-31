@@ -38,6 +38,9 @@ Newsletter、YouTube、播客和 Twitter/X 等来源中寻找真正值得阅读�
 完整的产品构想请阅读 [产品愿景](docs/product-vision.md)，个人可用版的开发路径请阅读
 [实施计划](docs/implementation-plan.md)。
 
+桌面端三栏阅读工作台可参考
+[界面概念图](docs/assets/northread-desktop-workspace-concept.png)。
+
 ## 当前状态
 
 项目处于个人可用版准备阶段。下一步是建立真实推荐评估样本，并跑通
