@@ -38,11 +38,22 @@ Newsletter、YouTube、播客和 Twitter/X 等来源中寻找真正值得阅读�
 完整的产品构想请阅读 [产品愿景](docs/product-vision.md)，个人可用版的开发路径请阅读
 [实施计划](docs/implementation-plan.md)。
 
-桌面端三栏阅读工作台可参考
-[界面概念图 v2](docs/assets/northread-desktop-workspace-concept-v2.png)，其中每份阅读材料
-都通过“目标 → 知识缺口 → 材料角色”建立明确关联。
+## 界面概念
+
+界面以中文为主，内容同时支持中英文材料——英文原文配中文推荐理由和中文 AI 解释。
+
+- [今日首页](docs/assets/northread-today-concept.svg)：一条最值得读的、两条有时间再读的、
+  今天过滤掉了什么、本周目标进展，以及昨天的阅读留下了什么。页面到此为止，
+  下面没有信息流，也没有未读数。
+- [三栏阅读工作台](docs/assets/northread-workspace-concept.svg)：每份材料都通过
+  “目标 → 知识缺口 → 材料角色”建立明确关联；分数可以展开成构成项，不出现裸分数；
+  推荐附带置信度、阅读建议和已知的不足。
+
+两张图都是手写 SVG，设计 token 集中在文件头部，换配色只改那一段。
+配色的推导和取舍见 [三套配色方向](docs/assets/palette-directions.svg)。
 
 ## 当前状态
 
-项目处于个人可用版准备阶段。下一步是建立真实推荐评估样本，并跑通
-“目标 → RSS → AI 排序 → Today → 反馈”的第一条纵向链路。
+项目处于个人可用版准备阶段，尚未开始写应用代码。下一步是按
+[实施计划第 7 节](docs/implementation-plan.md) 建立推荐评估基线，
+再跑通“目标 → RSS → AI 排序 → 今日 → 反馈”的第一条纵向链路。

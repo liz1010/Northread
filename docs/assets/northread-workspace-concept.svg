@@ -1,0 +1,450 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" width="1536" height="1024" role="img" aria-label="Northread 三栏阅读工作台概念图">
+  <title>Northread — 三栏阅读工作台</title>
+  <desc>界面以中文为主，内容同时支持中英文材料。左栏是当前目标和本目标的材料线索，中栏解释这份材料为什么契合目标、分数由什么构成，右栏是 AI 助手。配色：纸与陶。</desc>
+
+  <style><![CDATA[
+    /* ================================================================
+       设计 token —— 纸与陶 Paper & Clay
+       只在这里改颜色。下面的图形没有任何硬编码色值。
+
+       两个有颜色的角色，只有两个：
+         clay 陶土 = “现在就做”  品牌、当前导航、目标匹配分、主按钮
+         pine 墨绿 = “目标线索”  一切把内容和目标连起来的元素
+       其余全部中性。强调色预算：每屏最多 5 处陶土。
+       ================================================================ */
+    :root {
+      --ui:    'Inter', 'SF Pro Text', system-ui, -apple-system, 'Segoe UI',
+               'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+               'Noto Sans CJK SC', 'Source Han Sans SC', 'WenQuanYi Micro Hei', sans-serif;
+      --serif: 'Source Serif 4', 'Charter', 'Iowan Old Style', Georgia,
+               'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', serif;
+
+      --ink-900:  #16130F;   /* 标题、正文        */
+      --ink-700:  #3A342C;   /* 强标签            */
+      --ink-500:  #6E655A;   /* 次要文字          */
+      --ink-300:  #C9C0B2;   /* 图标描边、未选中  */
+      --ink-200:  #E5DED2;   /* 分隔线、边框      */
+      --ink-100:  #F2EDE4;   /* 下沉行、消息气泡  */
+      --surface:  #FDFBF7;   /* 卡片、阅读区      */
+      --canvas:   #F8F5EE;   /* 应用底、两侧栏    */
+
+      --clay-700: #A24B2E;   /* 强调色 —— 唯一一个 */
+      --clay-100: #F6E5DC;   /* 强调浅底、划线     */
+      --on-clay:  #FFFFFF;
+
+      --pine-700: #2A4A3F;   /* 辅助色 —— 目标线索 */
+      --pine-100: #E8EEEA;   /* 辅助浅底           */
+    }
+
+    text { font-family: var(--ui); fill: var(--ink-900); }
+
+    .canvas    { fill: var(--canvas); }
+    .surface   { fill: var(--surface); }
+    .hair      { stroke: var(--ink-200); stroke-width: 1; }
+    .card      { fill: var(--surface); stroke: var(--ink-200); stroke-width: 1; }
+    .sunken    { fill: var(--canvas); stroke: var(--ink-200); stroke-width: 1; }
+
+    .cap       { font-size: 10px; font-weight: 600; letter-spacing: .08em; fill: var(--ink-500); }
+    .cap-s     { font-size: 9px;  font-weight: 600; letter-spacing: .08em; fill: var(--ink-500); }
+    .brand     { font-size: 20px; font-weight: 600; letter-spacing: -.3px; }
+    .h-goal    { font-size: 17px; font-weight: 600; }
+    .t-13      { font-size: 13px; }
+    .t-12      { font-size: 12px; }
+    .t-115     { font-size: 11.5px; }
+    .t-11      { font-size: 11px; }
+    .mut       { fill: var(--ink-500); }
+    .mut-2     { fill: var(--ink-300); }
+    .semi      { font-weight: 600; }
+    .med       { font-weight: 500; }
+    .end       { text-anchor: end; }
+    .mid       { text-anchor: middle; }
+
+    .art-h     { font-family: var(--serif); font-size: 34px; font-weight: 600; letter-spacing: -.5px; }
+    .art-b     { font-family: var(--serif); font-size: 15px; fill: var(--ink-900); }
+    .art-hl    { fill: var(--clay-100); }
+
+    .clay-f    { fill: var(--clay-700); }
+    .clay-tint { fill: var(--clay-100); }
+    .clay-tx   { fill: var(--clay-700); }
+    .on-clay   { fill: var(--on-clay); }
+
+    .pine-f    { fill: var(--pine-700); }
+    .pine-s    { stroke: var(--pine-700); stroke-width: 1.5; fill: none; }
+    .pine-tint { fill: var(--pine-100); }
+    .pine-tx   { fill: var(--pine-700); }
+
+    .icon      { fill: none; stroke: var(--ink-500); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-d    { fill: none; stroke: var(--ink-300); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-c    { fill: none; stroke: var(--clay-700); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-p    { fill: none; stroke: var(--pine-700); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .chip      { fill: var(--surface); stroke: var(--ink-200); stroke-width: 1; }
+    .chip-tx   { font-size: 11px; fill: var(--ink-500); }
+    .track     { fill: var(--ink-200); }
+    .meter     { fill: var(--ink-500); }
+    .meter-lo  { fill: var(--ink-300); }
+
+    .arc-t     { fill: none; stroke: var(--ink-200);  stroke-width: 5; }
+    .arc-v     { fill: none; stroke: var(--clay-700); stroke-width: 5; stroke-linecap: round; }
+
+    .thumb     { fill: var(--ink-100); stroke: var(--ink-200); stroke-width: 1; }
+  ]]></style>
+
+  <rect x="0" y="0" width="1536" height="1024" class="surface"/>
+
+  <!-- ================================================================
+       顶栏
+       ================================================================ -->
+  <rect x="0" y="0" width="1536" height="64" class="surface"/>
+  <line x1="0" y1="64" x2="1536" y2="64" class="hair"/>
+
+  <g class="icon" transform="translate(28,26)"><path d="M0 0h20M0 6h20M0 12h20"/></g>
+
+  <!-- 陶土 1 / 5 —— 品牌标记 -->
+  <path class="clay-f" d="M74 40 L86 16 L98 40 Z"/>
+  <text class="brand" x="106" y="40">Northread</text>
+
+  <rect x="336" y="13" width="320" height="38" rx="19" class="card"/>
+  <g class="icon-p" transform="translate(356,24)"><circle cx="7" cy="8" r="7"/><path d="M7 4v4l3 2"/></g>
+  <text class="t-13 med pine-tx" x="380" y="37">目标：做出更可靠的 AI Agent</text>
+  <g class="icon" transform="translate(626,28)"><path d="M0 0l5 5 5-5"/></g>
+
+  <rect x="816" y="15" width="288" height="34" rx="10" class="sunken"/>
+  <g class="icon" transform="translate(834,25)"><circle cx="6" cy="6" r="5.5"/><path d="M10 10l4 4"/></g>
+  <text class="t-13 mut" x="862" y="37">搜索</text>
+  <rect x="1058" y="23" width="34" height="18" rx="5" fill="var(--ink-100)"/>
+  <text class="t-11 mut mid" x="1075" y="36">⌘K</text>
+
+  <g class="icon-p" transform="translate(1204,24)"><circle cx="8" cy="8" r="8"/><path d="M4.5 8l2.5 2.5L11.5 6"/></g>
+  <text class="t-13 mut" x="1230" y="37">同步完成</text>
+  <line x1="1372" y1="18" x2="1372" y2="46" class="hair"/>
+  <g class="icon" transform="translate(1398,23)"><path d="M4 7a5 5 0 0110 0c0 5 2 6 2 6H2s2-1 2-6"/><path d="M7 16h4"/></g>
+  <circle cx="1464" cy="32" r="17" class="pine-tint"/>
+  <text class="t-12 semi pine-tx mid" x="1464" y="36">NS</text>
+  <g class="icon" transform="translate(1490,29)"><path d="M0 0l5 5 5-5"/></g>
+
+  <!-- ================================================================
+       左栏 —— 目标、导航、材料线索
+       ================================================================ -->
+  <rect x="0" y="64" width="366" height="960" class="canvas"/>
+  <line x1="366" y1="64" x2="366" y2="1024" class="hair"/>
+
+  <text class="cap" x="24" y="100">资源总览</text>
+  <g class="icon" transform="translate(322,93)"><path d="M6 0L1 5l5 5M12 0L7 5l5 5"/></g>
+
+  <rect x="24" y="116" width="318" height="146" rx="12" class="card"/>
+  <text class="cap-s" x="42" y="140">当前目标</text>
+  <text class="h-goal" x="42" y="166">做出更可靠的 AI Agent</text>
+  <rect x="42" y="182" width="230" height="6" rx="3" class="track"/>
+  <rect x="42" y="182" width="97" height="6" rx="3" class="pine-f"/>
+  <text class="t-12 semi mut end" x="324" y="188">42%</text>
+  <text class="t-12 mut" x="42" y="212">当前聚焦：Agent 评测</text>
+  <rect x="42" y="224" width="96" height="24" rx="12" class="pine-tint"/>
+  <text class="t-11 pine-tx" x="54" y="240">3 个知识缺口</text>
+  <rect x="146" y="224" width="104" height="24" rx="12" class="chip"/>
+  <text class="chip-tx" x="158" y="240">12 份关联材料</text>
+
+  <!-- 导航 —— 与实施计划第 5 节的五个页面一致 -->
+  <!-- 陶土 2 / 5 —— 当前导航项 -->
+  <rect x="24" y="278" width="318" height="32" rx="9" class="clay-tint"/>
+  <g class="icon-c" transform="translate(42,286)"><rect x="0" y="1" width="14" height="13" rx="2.5"/><path d="M0 5h14M4 0v3M10 0v3"/></g>
+  <text class="t-13 semi clay-tx" x="68" y="299">今日</text>
+
+  <g class="icon" transform="translate(42,320)"><circle cx="7" cy="7" r="6.5"/><circle cx="7" cy="7" r="2.5"/></g>
+  <text class="t-13 mut" x="68" y="333">目标</text>
+
+  <g class="icon" transform="translate(42,354)"><path d="M1 12a5 5 0 015-5M1 12a10 10 0 0110-10"/><circle cx="1.5" cy="12.5" r="1.5"/></g>
+  <text class="t-13 mut" x="68" y="367">信源</text>
+
+  <g class="icon" transform="translate(42,388)"><path d="M0 1h5a2 2 0 012 2v10a2 2 0 00-2-2H0zM14 1H9a2 2 0 00-2 2v10a2 2 0 012-2h5z"/></g>
+  <text class="t-13 mut" x="68" y="401">资料库</text>
+
+  <g class="icon" transform="translate(42,422)"><path d="M1 13V6M6 13V1M11 13V8"/></g>
+  <text class="t-13 mut" x="68" y="435">复盘</text>
+
+  <line x1="24" y1="466" x2="342" y2="466" class="hair"/>
+  <text class="cap" x="24" y="494">本目标的材料</text>
+
+  <!-- 目标线索 -->
+  <line x1="30" y1="552" x2="30" y2="864" class="pine-s" stroke-dasharray="2 5"/>
+  <circle cx="30" cy="552" r="4.5" class="pine-f"/>
+  <circle cx="30" cy="656" r="4" fill="var(--pine-100)" stroke="var(--pine-700)" stroke-width="1.5"/>
+  <circle cx="30" cy="760" r="4" fill="var(--pine-100)" stroke="var(--pine-700)" stroke-width="1.5"/>
+  <circle cx="30" cy="864" r="4" fill="var(--pine-100)" stroke="var(--pine-700)" stroke-width="1.5"/>
+
+  <!-- 材料 1 —— 英文原文，当前选中 -->
+  <rect x="46" y="506" width="296" height="92" rx="11" fill="var(--surface)" stroke="var(--pine-700)" stroke-width="1.5"/>
+  <rect x="60" y="522" width="42" height="54" rx="4" fill="var(--ink-900)"/>
+  <text class="t-12 semi mid" x="81" y="553" fill="var(--surface)">AI</text>
+  <text class="t-13 semi" x="116" y="538">Building Effective Agents</text>
+  <text class="t-11 mut" x="116" y="556">Anthropic · 14 分钟</text>
+  <rect x="116" y="566" width="80" height="20" rx="10" class="pine-tint"/>
+  <text class="t-11 pine-tx" x="126" y="580">Agent 评测</text>
+  <text class="t-13 semi end" x="326" y="580">91</text>
+
+  <!-- 材料 2 —— 中文书 -->
+  <rect x="46" y="610" width="296" height="92" rx="11" class="card"/>
+  <rect x="60" y="626" width="42" height="54" rx="4" class="thumb"/>
+  <text class="t-11 mut mid" x="81" y="650">凤凰</text>
+  <text class="t-11 mut mid" x="81" y="664">项目</text>
+  <text class="t-13 semi" x="116" y="642">凤凰项目</text>
+  <text class="t-11 mut" x="116" y="660">Gene Kim 等 · 已读 45%</text>
+  <rect x="116" y="670" width="78" height="20" rx="10" class="chip"/>
+  <text class="chip-tx" x="126" y="684">可靠性基础</text>
+  <text class="t-13 semi mut end" x="326" y="684">78</text>
+
+  <!-- 材料 3 —— 中文技术博客 -->
+  <rect x="46" y="714" width="296" height="92" rx="11" class="card"/>
+  <rect x="60" y="730" width="42" height="54" rx="4" fill="var(--ink-700)"/>
+  <path d="M74 749l12 7-12 7z" fill="var(--surface)"/>
+  <text class="t-13 semi" x="116" y="746">Agent 评测实践</text>
+  <text class="t-11 mut" x="116" y="764">美团技术团队 · 18 分钟</text>
+  <rect x="116" y="774" width="68" height="20" rx="10" class="chip"/>
+  <text class="chip-tx" x="126" y="788">工程实践</text>
+  <text class="t-13 semi mut end" x="326" y="788">72</text>
+
+  <!-- 材料 4 —— 英文论文 -->
+  <rect x="46" y="818" width="296" height="92" rx="11" class="card"/>
+  <rect x="60" y="834" width="42" height="54" rx="4" class="thumb"/>
+  <path d="M68 846h26M68 854h26M68 862h18" class="icon-d"/>
+  <text class="t-13 semi" x="116" y="850">Evaluating LLM Agents</text>
+  <text class="t-11 mut" x="116" y="868">arXiv · 23 页</text>
+  <rect x="116" y="878" width="68" height="20" rx="10" class="chip"/>
+  <text class="chip-tx" x="126" y="892">评测方法</text>
+  <text class="t-13 semi mut end" x="326" y="892">65</text>
+
+  <line x1="0" y1="962" x2="366" y2="962" class="hair"/>
+  <g class="icon" transform="translate(28,986)"><path d="M0 0h14l-5 6v6l-4-2V6z"/></g>
+  <text class="t-12 mut" x="54" y="997">今天过滤了 186 条</text>
+  <g class="icon" transform="translate(310,986)"><path d="M0 3h16M0 11h16"/><circle cx="5" cy="3" r="2.5" fill="var(--canvas)"/><circle cx="11" cy="11" r="2.5" fill="var(--canvas)"/></g>
+
+  <!-- ================================================================
+       中栏 —— 阅读区
+       ================================================================ -->
+  <text class="t-13 mut" x="402" y="105">阅读进度</text>
+  <rect x="470" y="96" width="196" height="6" rx="3" class="track"/>
+  <rect x="470" y="96" width="67" height="6" rx="3" class="pine-f"/>
+  <text class="t-13 semi mut" x="680" y="105">34%</text>
+  <text class="t-13 semi mut" x="948" y="105">Aa</text>
+  <g class="icon" transform="translate(990,91)"><path d="M0 0h12v16l-6-4-6 4z"/></g>
+  <g class="icon" transform="translate(1032,98)"><circle cx="1" cy="1" r="1"/><circle cx="7" cy="1" r="1"/><circle cx="13" cy="1" r="1"/></g>
+  <line x1="366" y1="128" x2="1090" y2="128" class="hair"/>
+
+  <!-- 面包屑：目标线索的再次呈现 -->
+  <text class="t-12 pine-tx" x="402" y="160">做出更可靠的 AI Agent</text>
+  <text class="t-12 mut-2" x="570" y="160">/</text>
+  <text class="t-12 pine-tx" x="584" y="160">Agent 评测</text>
+  <text class="t-12 mut-2" x="654" y="160">/</text>
+  <text class="t-12 mut" x="668" y="160">核心阅读</text>
+
+  <!-- 英文原文 + 中文界面：内容支持双语 -->
+  <text class="art-h" x="402" y="208">Building Effective Agents</text>
+  <text class="t-13 mut" x="402" y="238">Anthropic  ·  14 分钟  ·  2024-05-07</text>
+
+  <!-- ============ 为什么契合 —— 产品的核心论证 ============ -->
+  <rect x="402" y="262" width="652" height="344" rx="12" class="sunken"/>
+
+  <circle cx="428" cy="292" r="13" class="pine-tint"/>
+  <g class="icon-p" transform="translate(422,286)"><path d="M6 0a4 4 0 013 6.5L8 8v2H4V8L3 6.5A4 4 0 016 0z"/><path d="M4.5 12h3"/></g>
+  <text class="cap" x="450" y="296">为什么这份材料契合你的目标</text>
+  <g class="icon" transform="translate(1022,289)"><path d="M0 5L5 0l5 5"/></g>
+
+  <!-- 目标 → 缺口 → 角色 -->
+  <rect x="422" y="312" width="152" height="62" rx="9" class="pine-tint"/>
+  <text class="cap-s pine-tx" x="436" y="332">目标</text>
+  <text class="t-12 semi pine-tx" x="436" y="352">做出更可靠的</text>
+  <text class="t-12 semi pine-tx" x="436" y="368">AI Agent</text>
+  <path d="M584 343h16m-4-4l4 4-4 4" class="icon-d"/>
+
+  <rect x="614" y="312" width="140" height="62" rx="9" class="card"/>
+  <text class="cap-s" x="628" y="332">知识缺口</text>
+  <text class="t-12 semi" x="628" y="354">Agent 评测</text>
+  <path d="M764 343h16m-4-4l4 4-4 4" class="icon-d"/>
+
+  <rect x="794" y="312" width="140" height="62" rx="9" class="card"/>
+  <text class="cap-s" x="808" y="332">材料角色</text>
+  <text class="t-12 semi" x="808" y="354">核心阅读</text>
+
+  <!-- 陶土 3 / 5 —— 目标匹配分 -->
+  <circle class="arc-t" cx="994" cy="337" r="26"/>
+  <circle class="arc-v" cx="994" cy="337" r="26" stroke-dasharray="148.7 163.4" transform="rotate(-90 994 337)"/>
+  <text class="semi mid" x="994" y="344" font-size="17">91</text>
+  <text class="cap-s mid" x="994" y="386">目标匹配</text>
+
+  <text class="t-12 mut" x="422" y="404">它给出了可靠评测 Agent 的基础方法与实践，正好对上你现在正在攻克的缺口。</text>
+  <text class="t-12 mut" x="422" y="424">读完它，后面排队的三篇论文才有共同的评测语言。</text>
+
+  <line x1="422" y1="444" x2="1034" y2="444" class="hair"/>
+  <text class="cap" x="422" y="468">带着这些问题读</text>
+  <circle cx="426" cy="486" r="2.5" class="pine-f"/>
+  <text class="t-12" x="440" y="490">高效的 Agent 如何在长周期里设定和推进目标？</text>
+  <circle cx="426" cy="508" r="2.5" class="pine-f"/>
+  <text class="t-12" x="440" y="512">哪些设计模式能提升生产环境中的可靠性？</text>
+  <circle cx="426" cy="530" r="2.5" class="pine-f"/>
+  <text class="t-12" x="440" y="534">除了任务成功率，还应该怎么评测 Agent？</text>
+
+  <!-- 分数拆解：91 永远不是一个孤立数字 -->
+  <line x1="422" y1="552" x2="1034" y2="552" class="hair"/>
+  <text class="cap-s" x="422" y="572">这个分数是怎么来的</text>
+
+  <text class="t-11 mut" x="422" y="586">目标相关性</text>
+  <rect x="486" y="581" width="48" height="5" rx="2.5" class="track"/>
+  <rect x="486" y="581" width="44" height="5" rx="2.5" class="meter"/>
+
+  <text class="t-11 mut" x="550" y="586">信源权重</text>
+  <rect x="602" y="581" width="48" height="5" rx="2.5" class="track"/>
+  <rect x="602" y="581" width="37" height="5" rx="2.5" class="meter"/>
+
+  <text class="t-11 mut" x="666" y="586">缺口匹配</text>
+  <rect x="718" y="581" width="48" height="5" rx="2.5" class="track"/>
+  <rect x="718" y="581" width="46" height="5" rx="2.5" class="meter"/>
+
+  <text class="t-11 mut" x="782" y="586">新颖度</text>
+  <rect x="823" y="581" width="48" height="5" rx="2.5" class="track"/>
+  <rect x="823" y="581" width="31" height="5" rx="2.5" class="meter"/>
+
+  <text class="t-11 mut" x="887" y="586">− 阅读成本</text>
+  <rect x="951" y="581" width="44" height="5" rx="2.5" class="track"/>
+  <rect x="951" y="581" width="13" height="5" rx="2.5" class="meter-lo"/>
+
+  <!-- ============ 阅读建议 + 置信度 ============ -->
+  <rect x="402" y="622" width="76" height="28" rx="14" class="pine-tint"/>
+  <text class="t-11 semi pine-tx mid" x="440" y="640">完整阅读</text>
+  <text class="t-12 mut" x="494" y="640">14 分钟</text>
+  <text class="t-12 mut-2" x="546" y="640">·</text>
+  <text class="t-12 mut" x="562" y="640">置信度</text>
+  <circle cx="610" cy="636" r="3" class="meter"/>
+  <circle cx="620" cy="636" r="3" class="meter"/>
+  <circle cx="630" cy="636" r="3" class="meter"/>
+  <text class="t-12 semi" x="642" y="640">高</text>
+  <text class="t-12 mut-2" x="666" y="640">·</text>
+  <text class="t-12 mut" x="682" y="640">成本权衡讲得薄，建议配合 arXiv 那篇一起读</text>
+
+  <!-- ============ 正文：英文原文 ============ -->
+  <text class="art-b" x="402" y="676">We believe that effective agents are built on a foundation of clear goals,</text>
+  <text class="art-b" x="402" y="702">thoughtful tool use, and rigorous evaluation. In this post, we share patterns</text>
+  <text class="art-b" x="402" y="728">and practices that have helped our agents perform reliably in production.</text>
+
+  <text class="art-b" x="402" y="772">At a high level, an agent perceives its environment, reasons about the best</text>
+  <text class="art-b" x="402" y="798">next steps, and takes actions using tools. The agent then observes the</text>
+  <rect class="art-hl" x="700" y="808" width="336" height="24" rx="3"/>
+  <text class="art-b" x="402" y="824">outcomes and iterates. Reliability emerges from designing each of</text>
+  <rect class="art-hl" x="398" y="834" width="404" height="24" rx="3"/>
+  <text class="art-b" x="402" y="850">these steps with explicit feedback and tight evaluation loops.</text>
+
+  <rect x="930" y="866" width="106" height="30" rx="15" class="card"/>
+  <g class="icon-p" transform="translate(946,875)"><path d="M5 0l1.4 3.6L10 5l-3.6 1.4L5 10 3.6 6.4 0 5l3.6-1.4z"/></g>
+  <text class="t-12 med" x="968" y="885">问 AI</text>
+
+  <!-- ============ 反馈 + 操作 ============ -->
+  <line x1="366" y1="908" x2="1090" y2="908" class="hair"/>
+  <text class="cap" x="402" y="932">这条推荐怎么样？</text>
+
+  <rect x="402" y="942" width="96" height="28" rx="14" class="chip"/>
+  <text class="chip-tx mid" x="450" y="960">对目标有帮助</text>
+  <rect x="510" y="942" width="86" height="28" rx="14" class="chip"/>
+  <text class="chip-tx mid" x="553" y="960">已经知道了</text>
+  <rect x="608" y="942" width="108" height="28" rx="14" class="chip"/>
+  <text class="chip-tx mid" x="662" y="960">改变了我的判断</text>
+  <rect x="728" y="942" width="86" height="28" rx="14" class="chip"/>
+  <text class="chip-tx mid" x="771" y="960">产生了行动</text>
+  <text class="t-11 mut-2" x="828" y="960">＋4 项</text>
+
+  <rect x="402" y="982" width="112" height="34" rx="9" class="card"/>
+  <g class="icon" transform="translate(420,991)"><path d="M9 0h5v5M14 0L7 7M12 8v5H1V2h5"/></g>
+  <text class="t-12 med" x="446" y="1004">打开原文</text>
+
+  <rect x="528" y="982" width="100" height="34" rx="9" class="card"/>
+  <g class="icon" transform="translate(546,991)"><rect x="0" y="0" width="13" height="15" rx="2"/><path d="M3.5 4h6M3.5 8h6M3.5 11.5h3"/></g>
+  <text class="t-12 med" x="572" y="1004">记笔记</text>
+
+  <rect x="642" y="982" width="112" height="34" rx="9" class="card"/>
+  <g class="icon" transform="translate(660,991)"><circle cx="7" cy="7.5" r="7"/><path d="M4 7.5l2.2 2.2L10.5 5.5"/></g>
+  <text class="t-12 med" x="686" y="1004">建行动项</text>
+
+  <!-- ================================================================
+       右栏 —— AI 助手（英文原文，中文解释）
+       ================================================================ -->
+  <rect x="1090" y="64" width="446" height="960" class="canvas"/>
+  <line x1="1090" y1="64" x2="1090" y2="1024" class="hair"/>
+
+  <text class="cap" x="1114" y="100">AI 助手</text>
+  <g class="icon" transform="translate(1496,93)"><path d="M6 0l5 5-5 5M0 0l5 5-5 5"/></g>
+
+  <rect x="1114" y="118" width="98" height="28" rx="9" class="card"/>
+  <g class="icon" transform="translate(1128,125)"><rect x="0" y="0" width="11" height="13" rx="1.5"/><path d="M3 4h5M3 7h5M3 10h3"/></g>
+  <text class="t-11 med" x="1150" y="136">当前材料</text>
+
+  <rect x="1222" y="118" width="204" height="28" rx="9" class="pine-tint"/>
+  <g class="icon-p" transform="translate(1236,125)"><circle cx="6" cy="6.5" r="6"/><circle cx="6" cy="6.5" r="2"/></g>
+  <text class="t-11 med pine-tx" x="1258" y="136">做出更可靠的 AI Agent</text>
+
+  <rect x="1114" y="154" width="110" height="28" rx="9" class="card"/>
+  <g class="icon" transform="translate(1128,161)"><path d="M0 11a5 5 0 015-5M0 11a10 10 0 0110-10"/><circle cx="0.5" cy="11.5" r="1.2"/></g>
+  <text class="t-11 med" x="1150" y="172">Agent 评测</text>
+
+  <rect x="1234" y="154" width="96" height="28" rx="9" class="chip"/>
+  <text class="chip-tx" x="1246" y="172">＋ 添加上下文</text>
+
+  <!-- 用户 -->
+  <circle cx="1128" cy="212" r="14" class="pine-tint"/>
+  <text class="t-11 semi pine-tx mid" x="1128" y="216">NS</text>
+  <rect x="1152" y="194" width="360" height="46" rx="12" fill="var(--ink-100)"/>
+  <text class="t-13" x="1170" y="222">这篇对 Northread 有什么可以直接用的？</text>
+  <text class="t-11 mut end" x="1496" y="258">10:42 ✓</text>
+
+  <!-- 助手：读英文原文，用中文回答 -->
+  <circle cx="1128" cy="292" r="14" class="pine-tint"/>
+  <g class="icon-p" transform="translate(1121,285)"><path d="M7 0l1.9 5.1L14 7l-5.1 1.9L7 14 5.1 8.9 0 7l5.1-1.9z"/></g>
+  <text class="t-13" x="1152" y="288">这篇文章有三条做法可以直接用在</text>
+  <text class="t-13" x="1152" y="310">Northread 上。</text>
+
+  <circle cx="1160" cy="344" r="9" fill="var(--ink-100)"/>
+  <text class="t-11 semi mut mid" x="1160" y="348">1</text>
+  <text class="t-13 semi" x="1180" y="348">收紧评测闭环</text>
+  <text class="t-12 mut" x="1180" y="370">给关键步骤埋反馈信号，定期回看，</text>
+  <text class="t-12 mut" x="1180" y="390">尽早发现失败模式。</text>
+
+  <circle cx="1160" cy="424" r="9" fill="var(--ink-100)"/>
+  <text class="t-11 semi mut mid" x="1160" y="428">2</text>
+  <text class="t-13 semi" x="1180" y="428">为不确定性做设计</text>
+  <text class="t-12 mut" x="1180" y="450">加入显式的置信度检查，在模型不确</text>
+  <text class="t-12 mut" x="1180" y="470">定时留出转交人工的路径。</text>
+
+  <circle cx="1160" cy="504" r="9" fill="var(--ink-100)"/>
+  <text class="t-11 semi mut mid" x="1160" y="508">3</text>
+  <text class="t-13 semi" x="1180" y="508">面向真实环境优化可靠性</text>
+  <text class="t-12 mut" x="1180" y="530">优先保证在脏输入下表现稳定，而不</text>
+  <text class="t-12 mut" x="1180" y="550">是刷榜。跟踪真正重要的生产指标。</text>
+
+  <g class="icon" transform="translate(1152,586)"><path d="M0 5h3v7H0zM5 12V5l3-5h1a2 2 0 012 2l-1 3h4a2 2 0 012 2l-1.5 5H5z"/></g>
+  <g class="icon" transform="translate(1188,586)"><path d="M0 0h3v7H0zM5 0v7l3 5h1a2 2 0 002-2l-1-3h4a2 2 0 002-2l-1.5-5H5z"/></g>
+  <g class="icon" transform="translate(1224,586)"><rect x="0" y="3" width="9" height="10" rx="1.5"/><path d="M3 3V1a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2"/></g>
+  <text class="t-11 mut end" x="1496" y="598">10:42</text>
+
+  <!-- 权重建议 —— AI 提议、用户确认（实施计划 6.4 节） -->
+  <rect x="1114" y="646" width="398" height="128" rx="12" class="card"/>
+  <circle cx="1142" cy="676" r="14" class="pine-tint"/>
+  <g class="icon-p" transform="translate(1135,669)"><path d="M7 0v14M1 4h12M3 4l-2 5h4zM11 4l-2 5h4z"/></g>
+  <text class="t-13 semi" x="1170" y="674">要提高这个信源的权重吗？</text>
+  <text class="t-12 mut" x="1170" y="698">你最近三次都把 Anthropic 的文章标记为</text>
+  <text class="t-12 mut" x="1170" y="718">“产生了行动”。这次调整可以撤销。</text>
+  <g class="icon" transform="translate(1482,668)"><path d="M0 0l10 10M10 0L0 10"/></g>
+
+  <rect x="1330" y="730" width="68" height="32" rx="9" class="card"/>
+  <text class="t-12 med mid" x="1364" y="750">取消</text>
+  <!-- 陶土 4 / 5 —— 全屏唯一的主操作 -->
+  <rect x="1410" y="730" width="90" height="32" rx="9" class="clay-f"/>
+  <text class="t-12 semi on-clay mid" x="1455" y="750">确认</text>
+
+  <!-- 输入框 -->
+  <rect x="1114" y="818" width="398" height="112" rx="14" class="card"/>
+  <text class="t-13 mut" x="1136" y="850">就这份材料提问…</text>
+  <g class="icon" transform="translate(1136,896)"><path d="M12 4L5.5 10.5a2.5 2.5 0 01-3.5-3.5L8 1a4 4 0 015.5 5.5L7 13"/></g>
+  <g class="icon" transform="translate(1170,896)"><path d="M6 0l1.6 4.4L12 6l-4.4 1.6L6 12 4.4 7.6 0 6l4.4-1.6z"/></g>
+  <text class="t-12 mut end" x="1442" y="906">内部模型</text>
+  <g class="icon" transform="translate(1450,899)"><path d="M0 0l4 4 4-4"/></g>
+  <!-- 陶土 5 / 5 —— 发送 -->
+  <circle cx="1484" cy="901" r="17" class="clay-f"/>
+  <g transform="translate(1477,894)" fill="none" stroke="var(--on-clay)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13V1M2 6l5-5 5 5"/></g>
+</svg>

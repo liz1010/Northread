@@ -1,0 +1,351 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 1024" width="1536" height="1024" role="img" aria-label="Northread 今日首页概念图">
+  <title>Northread — 今日</title>
+  <desc>核心页面。一条最值得读的、两条有时间再读的、今天过滤掉了什么、本周目标进展，以及昨天的阅读留下了什么。没有信息流，没有未读数。界面中文，内容中英文都支持。配色：纸与陶。</desc>
+
+  <style><![CDATA[
+    /* ================================================================
+       设计 token —— 纸与陶 Paper & Clay（与工作台概念图完全一致）
+       只在这里改颜色。下面的图形没有任何硬编码色值。
+
+       clay 陶土 = “现在就做”  品牌、当前导航、目标匹配分、主按钮
+       pine 墨绿 = “目标线索”  一切把内容和目标连起来的元素
+       强调色预算：每屏最多 5 处陶土。本页用了 4 处。
+       ================================================================ */
+    :root {
+      --ui:    'Inter', 'SF Pro Text', system-ui, -apple-system, 'Segoe UI',
+               'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+               'Noto Sans CJK SC', 'Source Han Sans SC', 'WenQuanYi Micro Hei', sans-serif;
+      --serif: 'Source Serif 4', 'Charter', 'Iowan Old Style', Georgia,
+               'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', serif;
+
+      --ink-900:  #16130F;
+      --ink-700:  #3A342C;
+      --ink-500:  #6E655A;
+      --ink-300:  #C9C0B2;
+      --ink-200:  #E5DED2;
+      --ink-100:  #F2EDE4;
+      --surface:  #FDFBF7;
+      --canvas:   #F8F5EE;
+
+      --clay-700: #A24B2E;
+      --clay-100: #F6E5DC;
+      --on-clay:  #FFFFFF;
+
+      --pine-700: #2A4A3F;
+      --pine-100: #E8EEEA;
+    }
+
+    text { font-family: var(--ui); fill: var(--ink-900); }
+
+    .canvas  { fill: var(--canvas); }
+    .surface { fill: var(--surface); }
+    .hair    { stroke: var(--ink-200); stroke-width: 1; }
+    .card    { fill: var(--surface); stroke: var(--ink-200); stroke-width: 1; }
+    .sunken  { fill: var(--canvas); stroke: var(--ink-200); stroke-width: 1; }
+
+    .cap     { font-size: 10px; font-weight: 600; letter-spacing: .08em; fill: var(--ink-500); }
+    .cap-s   { font-size: 9px;  font-weight: 600; letter-spacing: .08em; fill: var(--ink-500); }
+    .brand   { font-size: 20px; font-weight: 600; letter-spacing: -.3px; }
+    .page-h  { font-size: 30px; font-weight: 600; letter-spacing: -.4px; }
+    .t-15    { font-size: 15px; }
+    .t-14    { font-size: 14px; }
+    .t-13    { font-size: 13px; }
+    .t-12    { font-size: 12px; }
+    .t-115   { font-size: 11.5px; }
+    .t-11    { font-size: 11px; }
+    .mut     { fill: var(--ink-500); }
+    .mut-2   { fill: var(--ink-300); }
+    .semi    { font-weight: 600; }
+    .med     { font-weight: 500; }
+    .end     { text-anchor: end; }
+    .mid     { text-anchor: middle; }
+
+    .art-h   { font-family: var(--serif); font-size: 22px; font-weight: 600; letter-spacing: -.3px; }
+
+    .clay-f    { fill: var(--clay-700); }
+    .clay-tint { fill: var(--clay-100); }
+    .clay-tx   { fill: var(--clay-700); }
+    .on-clay   { fill: var(--on-clay); }
+
+    .pine-f    { fill: var(--pine-700); }
+    .pine-tint { fill: var(--pine-100); }
+    .pine-tx   { fill: var(--pine-700); }
+
+    .icon    { fill: none; stroke: var(--ink-500); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-d  { fill: none; stroke: var(--ink-300); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-c  { fill: none; stroke: var(--clay-700); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-p  { fill: none; stroke: var(--pine-700); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .chip    { fill: var(--surface); stroke: var(--ink-200); stroke-width: 1; }
+    .chip-tx { font-size: 11px; fill: var(--ink-500); }
+    .track   { fill: var(--ink-200); }
+    .meter   { fill: var(--ink-500); }
+
+    .arc-t   { fill: none; stroke: var(--ink-200);  stroke-width: 5.5; }
+    .arc-v   { fill: none; stroke: var(--clay-700); stroke-width: 5.5; stroke-linecap: round; }
+
+    .thumb   { fill: var(--ink-100); stroke: var(--ink-200); stroke-width: 1; }
+  ]]></style>
+
+  <rect x="0" y="0" width="1536" height="1024" class="surface"/>
+
+  <!-- ================================================================
+       顶栏
+       ================================================================ -->
+  <rect x="0" y="0" width="1536" height="64" class="surface"/>
+  <line x1="0" y1="64" x2="1536" y2="64" class="hair"/>
+
+  <g class="icon" transform="translate(28,26)"><path d="M0 0h20M0 6h20M0 12h20"/></g>
+
+  <!-- 陶土 1 / 4 —— 品牌标记 -->
+  <path class="clay-f" d="M74 40 L86 16 L98 40 Z"/>
+  <text class="brand" x="106" y="40">Northread</text>
+
+  <rect x="336" y="13" width="204" height="38" rx="19" class="card"/>
+  <g class="icon-p" transform="translate(356,24)"><circle cx="7" cy="8" r="7"/><path d="M7 4v4l3 2"/></g>
+  <text class="t-13 med pine-tx" x="380" y="37">全部进行中的目标</text>
+  <g class="icon" transform="translate(510,28)"><path d="M0 0l5 5 5-5"/></g>
+
+  <rect x="816" y="15" width="288" height="34" rx="10" class="sunken"/>
+  <g class="icon" transform="translate(834,25)"><circle cx="6" cy="6" r="5.5"/><path d="M10 10l4 4"/></g>
+  <text class="t-13 mut" x="862" y="37">搜索</text>
+  <rect x="1058" y="23" width="34" height="18" rx="5" fill="var(--ink-100)"/>
+  <text class="t-11 mut mid" x="1075" y="36">⌘K</text>
+
+  <g class="icon-p" transform="translate(1196,24)"><circle cx="8" cy="8" r="8"/><path d="M4.5 8l2.5 2.5L11.5 6"/></g>
+  <text class="t-13 mut" x="1222" y="37">06:00 已同步</text>
+  <line x1="1372" y1="18" x2="1372" y2="46" class="hair"/>
+  <g class="icon" transform="translate(1398,23)"><path d="M4 7a5 5 0 0110 0c0 5 2 6 2 6H2s2-1 2-6"/><path d="M7 16h4"/></g>
+  <circle cx="1464" cy="32" r="17" class="pine-tint"/>
+  <text class="t-12 semi pine-tx mid" x="1464" y="36">NS</text>
+  <g class="icon" transform="translate(1490,29)"><path d="M0 0l5 5 5-5"/></g>
+
+  <!-- ================================================================
+       左栏
+       ================================================================ -->
+  <rect x="0" y="64" width="366" height="960" class="canvas"/>
+  <line x1="366" y1="64" x2="366" y2="1024" class="hair"/>
+
+  <text class="cap" x="24" y="100">总览</text>
+
+  <!-- 陶土 2 / 4 —— 当前导航项 -->
+  <rect x="24" y="116" width="318" height="32" rx="9" class="clay-tint"/>
+  <g class="icon-c" transform="translate(42,124)"><rect x="0" y="1" width="14" height="13" rx="2.5"/><path d="M0 5h14M4 0v3M10 0v3"/></g>
+  <text class="t-13 semi clay-tx" x="68" y="137">今日</text>
+
+  <g class="icon" transform="translate(42,158)"><circle cx="7" cy="7" r="6.5"/><circle cx="7" cy="7" r="2.5"/></g>
+  <text class="t-13 mut" x="68" y="171">目标</text>
+
+  <g class="icon" transform="translate(42,192)"><path d="M1 12a5 5 0 015-5M1 12a10 10 0 0110-10"/><circle cx="1.5" cy="12.5" r="1.5"/></g>
+  <text class="t-13 mut" x="68" y="205">信源</text>
+
+  <g class="icon" transform="translate(42,226)"><path d="M0 1h5a2 2 0 012 2v10a2 2 0 00-2-2H0zM14 1H9a2 2 0 00-2 2v10a2 2 0 012-2h5z"/></g>
+  <text class="t-13 mut" x="68" y="239">资料库</text>
+
+  <g class="icon" transform="translate(42,260)"><path d="M1 13V6M6 13V1M11 13V8"/></g>
+  <text class="t-13 mut" x="68" y="273">复盘</text>
+
+  <line x1="24" y1="304" x2="342" y2="304" class="hair"/>
+  <text class="cap" x="24" y="332">进行中的目标</text>
+
+  <rect x="24" y="346" width="318" height="72" rx="11" class="card"/>
+  <text class="t-13 semi" x="42" y="372">做出更可靠的 AI Agent</text>
+  <rect x="42" y="382" width="240" height="5" rx="2.5" class="track"/>
+  <rect x="42" y="382" width="101" height="5" rx="2.5" class="pine-f"/>
+  <text class="t-11 semi mut end" x="324" y="387">42%</text>
+  <text class="t-11 mut" x="42" y="406">聚焦：Agent 评测 · 2 个缺口未补</text>
+
+  <rect x="24" y="430" width="318" height="72" rx="11" class="card"/>
+  <text class="t-13 semi" x="42" y="456">把评测流程跑起来</text>
+  <rect x="42" y="466" width="240" height="5" rx="2.5" class="track"/>
+  <rect x="42" y="466" width="43" height="5" rx="2.5" class="pine-f"/>
+  <text class="t-11 semi mut end" x="324" y="471">18%</text>
+  <text class="t-11 mut" x="42" y="490">聚焦：离线打分 · 4 个缺口未补</text>
+
+  <rect x="24" y="514" width="318" height="30" rx="9" class="sunken" stroke-dasharray="4 4"/>
+  <text class="t-12 mut" x="42" y="534">＋ 新建目标</text>
+
+  <line x1="24" y1="574" x2="342" y2="574" class="hair"/>
+  <text class="cap" x="24" y="602">信源</text>
+  <text class="t-12 mut" x="24" y="626">24 个订阅源</text>
+  <text class="t-12 mut" x="24" y="648">今早有 2 个抓取失败</text>
+  <text class="t-12 med pine-tx" x="24" y="670">去处理 →</text>
+
+  <line x1="24" y1="702" x2="342" y2="702" class="hair"/>
+  <text class="cap" x="24" y="730">最近的策略调整</text>
+
+  <path d="M28 750v-9m-3 3l3-3 3 3" class="icon-p"/>
+  <text class="t-12" x="44" y="752">Anthropic 已提高权重</text>
+  <text class="t-11 mut" x="44" y="770">你确认的 · 2 天前</text>
+
+  <path d="M28 800v-9m-3 6l3 3 3-3" class="icon-d"/>
+  <text class="t-12" x="44" y="802">新闻快讯已降低权重</text>
+  <text class="t-11 mut" x="44" y="820">AI 建议 · </text>
+  <text class="t-11 med pine-tx" x="108" y="820">撤销</text>
+
+  <line x1="0" y1="962" x2="366" y2="962" class="hair"/>
+  <g class="icon" transform="translate(28,986)"><circle cx="7" cy="7" r="3"/><path d="M7 0v2M7 12v2M0 7h2M12 7h2M2 2l1.5 1.5M10.5 10.5L12 12M12 2l-1.5 1.5M3.5 10.5L2 12"/></g>
+  <text class="t-12 mut" x="54" y="997">设置</text>
+
+  <!-- ================================================================
+       主区 —— 一条最值得读的，两条有时间再读的，以及被藏起来的
+       ================================================================ -->
+  <text class="page-h" x="402" y="112">今日</text>
+  <text class="t-13 mut" x="402" y="140">7 月 31 日 星期三  ·  从 189 条候选里选出 3 条</text>
+  <line x1="402" y1="164" x2="1124" y2="164" class="hair"/>
+
+  <text class="cap" x="402" y="194">今天最值得读的一条</text>
+
+  <rect x="402" y="208" width="722" height="324" rx="14" class="card"/>
+
+  <rect x="426" y="232" width="56" height="72" rx="5" fill="var(--ink-900)"/>
+  <text class="t-13 semi mid" x="454" y="274" fill="var(--surface)">AI</text>
+
+  <!-- 英文原文 + 中文推荐理由：内容支持双语 -->
+  <text class="art-h" x="502" y="258">Building Effective Agents</text>
+  <text class="t-12 mut" x="502" y="280">Anthropic  ·  14 分钟  ·  2024-05-07</text>
+
+  <rect x="502" y="294" width="176" height="26" rx="13" class="pine-tint"/>
+  <text class="t-11 med pine-tx mid" x="590" y="311">做出更可靠的 AI Agent</text>
+  <path d="M688 307h14m-4-4l4 4-4 4" class="icon-d"/>
+  <rect x="714" y="294" width="82" height="26" rx="13" class="chip"/>
+  <text class="chip-tx mid" x="755" y="311">Agent 评测</text>
+  <path d="M806 307h14m-4-4l4 4-4 4" class="icon-d"/>
+  <rect x="832" y="294" width="72" height="26" rx="13" class="chip"/>
+  <text class="chip-tx mid" x="868" y="311">核心阅读</text>
+
+  <!-- 陶土 3 / 4 —— 目标匹配分 -->
+  <circle class="arc-t" cx="1062" cy="258" r="30"/>
+  <circle class="arc-v" cx="1062" cy="258" r="30" stroke-dasharray="171.5 188.5" transform="rotate(-90 1062 258)"/>
+  <text class="semi mid" x="1062" y="265" font-size="19">91</text>
+  <text class="cap-s mid" x="1062" y="308">目标匹配</text>
+
+  <line x1="426" y1="338" x2="1100" y2="338" class="hair"/>
+  <text class="cap" x="426" y="362">为什么是它，为什么是现在</text>
+  <text class="t-13" x="426" y="388">它是 Agent 评测下面那三篇论文的前置材料，</text>
+  <text class="t-13" x="426" y="410">也是今天唯一正面处理“失败模式”这个开放缺口的候选。</text>
+
+  <rect x="426" y="426" width="76" height="28" rx="14" class="pine-tint"/>
+  <text class="t-11 semi pine-tx mid" x="464" y="444">完整阅读</text>
+  <text class="t-12 mut" x="518" y="444">14 分钟</text>
+  <text class="t-12 mut-2" x="570" y="444">·</text>
+  <text class="t-12 mut" x="586" y="444">置信度</text>
+  <circle cx="646" cy="440" r="3" class="meter"/>
+  <circle cx="656" cy="440" r="3" class="meter"/>
+  <circle cx="666" cy="440" r="3" class="meter"/>
+  <text class="t-12 semi" x="678" y="444">高</text>
+  <text class="t-12 mut-2" x="702" y="444">·</text>
+  <text class="t-12 mut" x="718" y="444">成本权衡讲得薄</text>
+
+  <!-- 陶土 4 / 4 —— 全页唯一的主操作 -->
+  <rect x="426" y="472" width="96" height="36" rx="10" class="clay-f"/>
+  <text class="t-13 semi on-clay mid" x="474" y="495">立即阅读</text>
+  <rect x="536" y="472" width="70" height="36" rx="10" class="card"/>
+  <text class="t-13 med mid" x="571" y="495">稍后</text>
+  <rect x="620" y="472" width="70" height="36" rx="10" class="card"/>
+  <text class="t-13 med mut mid" x="655" y="495">忽略</text>
+  <text class="t-12 med pine-tx end" x="1100" y="495">这个分数怎么来的？→</text>
+
+  <!-- 两条候选：一中一英 -->
+  <text class="cap" x="402" y="568">有时间再读</text>
+
+  <rect x="402" y="582" width="350" height="192" rx="12" class="card"/>
+  <rect x="424" y="604" width="40" height="52" rx="4" class="thumb"/>
+  <text class="t-11 mut mid" x="444" y="626">凤凰</text>
+  <text class="t-11 mut mid" x="444" y="640">项目</text>
+  <text class="t-14 semi" x="480" y="620">凤凰项目</text>
+  <text class="t-11 mut" x="480" y="640">Gene Kim 等 · 已读 45% · 22 分钟</text>
+  <rect x="480" y="652" width="112" height="22" rx="11" class="pine-tint"/>
+  <text class="t-11 pine-tx" x="490" y="667">把评测流程跑起来</text>
+  <line x1="424" y1="694" x2="730" y2="694" class="hair"/>
+  <text class="t-115 mut" x="424" y="716">接着你上次停下的可靠性那一章。属于</text>
+  <text class="t-115 mut" x="424" y="736">背景补充，不是核心阅读。</text>
+  <text class="t-13 semi" x="424" y="758">78</text>
+  <text class="t-11 mut" x="446" y="758">·  速览第 6 章</text>
+  <rect x="670" y="742" width="60" height="26" rx="13" class="card"/>
+  <text class="t-12 med mid" x="700" y="759">阅读</text>
+
+  <rect x="774" y="582" width="350" height="192" rx="12" class="card"/>
+  <rect x="796" y="604" width="40" height="52" rx="4" class="thumb"/>
+  <path d="M804 616h24M804 624h24M804 632h16" class="icon-d"/>
+  <text class="t-14 semi" x="852" y="620">Evaluating LLM Agents</text>
+  <text class="t-11 mut" x="852" y="640">arXiv · 23 页 · 35 分钟</text>
+  <rect x="852" y="652" width="174" height="22" rx="11" class="pine-tint"/>
+  <text class="t-11 pine-tx" x="862" y="667">做出更可靠的 AI Agent</text>
+  <line x1="796" y1="694" x2="1102" y2="694" class="hair"/>
+  <text class="t-115 mut" x="796" y="716">补上今天第一条缺的成本权衡。建议读</text>
+  <text class="t-115 mut" x="796" y="736">完第一条之后再看。</text>
+  <text class="t-13 semi" x="796" y="758">65</text>
+  <text class="t-11 mut" x="818" y="758">·  只读第 3–5 节</text>
+  <rect x="1042" y="742" width="60" height="26" rx="13" class="card"/>
+  <text class="t-12 med mid" x="1072" y="759">阅读</text>
+
+  <!-- 被藏起来的部分本身就是产品价值 -->
+  <rect x="402" y="804" width="722" height="90" rx="12" class="sunken"/>
+  <g class="icon" transform="translate(426,830)"><path d="M0 0h16l-6 7v7l-4-2V7z"/></g>
+  <text class="t-14 semi" x="456" y="840">今天过滤了 186 条</text>
+  <text class="t-12 mut" x="456" y="864">104 条偏离目标  ·  38 条近似重复  ·  27 条信息量低  ·  17 条触发信源频次上限</text>
+  <text class="t-12 med pine-tx end" x="1100" y="840">看看被藏起来的内容 →</text>
+
+  <text class="t-15 semi" x="402" y="938">今天就到这里。</text>
+  <text class="t-13 mut" x="402" y="962">Northread 刻意隐藏了其余内容。这条线下面没有信息流，也没有未读数。</text>
+
+  <!-- ================================================================
+       右栏 —— 进展，以及昨天留下了什么
+       ================================================================ -->
+  <rect x="1160" y="64" width="376" height="960" class="canvas"/>
+  <line x1="1160" y1="64" x2="1160" y2="1024" class="hair"/>
+
+  <text class="cap" x="1192" y="100">本周</text>
+
+  <text class="t-13 semi" x="1192" y="128">做出更可靠的 AI Agent</text>
+  <rect x="1192" y="138" width="260" height="5" rx="2.5" class="track"/>
+  <rect x="1192" y="138" width="109" height="5" rx="2.5" class="pine-f"/>
+  <text class="t-11 semi mut end" x="1504" y="143">42%</text>
+  <text class="t-11 mut" x="1192" y="164">本周 +8%  ·  读完 3 份  ·  补上 1 个缺口</text>
+
+  <text class="t-13 semi" x="1192" y="198">把评测流程跑起来</text>
+  <rect x="1192" y="208" width="260" height="5" rx="2.5" class="track"/>
+  <rect x="1192" y="208" width="47" height="5" rx="2.5" class="pine-f"/>
+  <text class="t-11 semi mut end" x="1504" y="213">18%</text>
+  <text class="t-11 mut" x="1192" y="234">本周没有进展  ·  可以考虑暂停</text>
+
+  <line x1="1192" y1="266" x2="1504" y2="266" class="hair"/>
+  <text class="cap" x="1192" y="294">阅读预算</text>
+  <text class="t-12 mut" x="1192" y="318">本周预算 4 小时，已用 2 小时 10 分</text>
+  <rect x="1192" y="330" width="312" height="6" rx="3" class="track"/>
+  <rect x="1192" y="330" width="169" height="6" rx="3" class="meter"/>
+
+  <line x1="1192" y1="368" x2="1504" y2="368" class="hair"/>
+  <text class="cap" x="1192" y="396">昨天留下了什么</text>
+
+  <rect x="1192" y="412" width="312" height="102" rx="11" class="card"/>
+  <text class="cap-s" x="1210" y="434">知识卡片</text>
+  <text class="t-12" x="1210" y="458">评测必须跑在完整轨迹上，而不只是</text>
+  <text class="t-12" x="1210" y="478">看最终答案。</text>
+  <text class="t-11 mut" x="1210" y="500">来自 Agent 评测实践 · 美团技术团队</text>
+
+  <rect x="1192" y="530" width="312" height="92" rx="11" class="card"/>
+  <rect x="1210" y="550" width="14" height="14" rx="4" fill="none" stroke="var(--ink-300)" stroke-width="1.5"/>
+  <text class="cap-s" x="1234" y="562">行动项</text>
+  <text class="t-12" x="1210" y="588">下一轮 eval 之前，给排序 prompt</text>
+  <text class="t-12" x="1210" y="608">加一个置信度检查。</text>
+
+  <rect x="1192" y="638" width="312" height="74" rx="11" class="card"/>
+  <text class="cap-s" x="1210" y="660">你给出的反馈</text>
+  <text class="t-12" x="1210" y="684">2 条标为“产生了行动”，</text>
+  <text class="t-12" x="1210" y="702">1 条标为“已经知道了”。</text>
+
+  <line x1="1192" y1="744" x2="1504" y2="744" class="hair"/>
+  <text class="cap" x="1192" y="772">每周复盘</text>
+
+  <rect x="1192" y="788" width="312" height="146" rx="11" class="sunken"/>
+  <text class="t-13 semi" x="1212" y="816">周日早上生成</text>
+  <text class="t-12 mut" x="1212" y="840">它会回答三件事：</text>
+  <circle cx="1216" cy="858" r="2.5" class="pine-f"/>
+  <text class="t-12 mut" x="1230" y="862">哪些阅读真的推动了目标</text>
+  <circle cx="1216" cy="880" r="2.5" class="pine-f"/>
+  <text class="t-12 mut" x="1230" y="884">哪些信源只贡献了噪声</text>
+  <circle cx="1216" cy="902" r="2.5" class="pine-f"/>
+  <text class="t-12 mut" x="1230" y="906">下周该调整什么</text>
+</svg>
