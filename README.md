@@ -39,7 +39,8 @@ Newsletter、YouTube、播客和 Twitter/X 等来源中寻找真正值得阅读�
 [实施计划](docs/implementation-plan.md)。
 
 桌面端三栏阅读工作台可参考
-[界面概念图](docs/assets/northread-desktop-workspace-concept.png)。
+[界面概念图 v2](docs/assets/northread-desktop-workspace-concept-v2.png)，其中每份阅读材料
+都通过“目标 → 知识缺口 → 材料角色”建立明确关联。
 
 ## 当前状态
 
