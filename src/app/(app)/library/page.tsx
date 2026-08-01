@@ -1,5 +1,5 @@
-import { FEEDBACK_KINDS } from "../../lib/feedback.ts";
-import { getLibrary } from "../../lib/queries.ts";
+import { FEEDBACK_KINDS } from "../../../lib/feedback.ts";
+import { getLibrary } from "../../../lib/queries.ts";
 
 export const dynamic = "force-dynamic";
 

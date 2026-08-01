@@ -1,4 +1,4 @@
-import { getGoalsWithNodes } from "../../lib/queries.ts";
+import { getGoalsWithNodes } from "../../../lib/queries.ts";
 
 export const dynamic = "force-dynamic";
 

@@ -6,12 +6,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
     "db:push": "drizzle-kit push",
     "ingest": "node scripts/ingest.ts",
     "recommend": "node scripts/recommend.ts",
     "seed": "node scripts/seed.ts",
-    "eval": "node scripts/eval.ts"
+    "eval": "node scripts/eval.ts",
+    "preflight": "node scripts/preflight.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

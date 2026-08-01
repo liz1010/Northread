@@ -1,0 +1,36 @@
+[Unit]
+Description=Northread
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 改成你的用户名和实际路径
+User=northread
+WorkingDirectory=/srv/northread
+
+# 环境变量从这里读。这个文件权限要设成 600，里面有 API key 和访问密码。
+EnvironmentFile=/srv/northread/.env.production
+
+# standalone 产物自带 server.js，不需要 next 命令，也不需要 node_modules
+# 配置不对就别起来，好过静默跑在错误状态上
+ExecStartPre=/usr/bin/node scripts/preflight.ts
+ExecStart=/usr/bin/node .next/standalone/server.js
+
+Restart=always
+RestartSec=5
+
+# 崩溃时留下日志
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=northread
+
+# 基本加固：这个进程只需要读代码、写 data 目录、访问网络
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/northread/data
+
+[Install]
+WantedBy=multi-user.target

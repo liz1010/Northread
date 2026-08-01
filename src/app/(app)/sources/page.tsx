@@ -1,4 +1,4 @@
-import { getSources } from "../../lib/queries.ts";
+import { getSources } from "../../../lib/queries.ts";
 
 export const dynamic = "force-dynamic";
 

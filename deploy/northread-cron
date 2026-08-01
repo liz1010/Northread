@@ -1,0 +1,14 @@
+# Northread 定时任务。装法：
+#   sudo cp deploy/northread-cron /etc/cron.d/northread
+#   sudo chmod 644 /etc/cron.d/northread
+#
+# 注意：cron 的环境变量极少，必须显式 source .env.production，
+# 否则 NORTHREAD_API_KEY 拿不到，会静默退回 Mock —— 你会看到推荐每天
+# 都在更新，但全是关键词匹配的结果，很难发现。
+
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+
+# 每天早上 6:00 抓取，6:10 生成当天推荐
+0 6 * * * northread cd /srv/northread && set -a && . ./.env.production && set +a && /usr/bin/node scripts/ingest.ts >> /var/log/northread/ingest.log 2>&1
+10 6 * * * northread cd /srv/northread && set -a && . ./.env.production && set +a && /usr/bin/node scripts/recommend.ts >> /var/log/northread/recommend.log 2>&1

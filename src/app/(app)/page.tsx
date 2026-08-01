@@ -1,11 +1,11 @@
-import { RecCard } from "../components/RecCard.tsx";
+import { RecCard } from "../../components/RecCard.tsx";
 import {
   getFailedSources,
   getFilterStats,
   getInventory,
   getTodayRecs,
   todayStr,
-} from "../lib/queries.ts";
+} from "../../lib/queries.ts";
 
 export const dynamic = "force-dynamic";
 
