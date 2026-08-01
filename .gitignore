@@ -23,3 +23,10 @@ __pycache__/
 *.log
 data/
 tmp/
+
+# Northread 运行时
+data/
+.env.local
+.npm-install.log
+next-env.d.ts
+tsconfig.tsbuildinfo
