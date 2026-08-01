@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/*
+ * 纸与陶 Paper & Clay —— 与 docs/assets 里的概念图同一套 token。
+ *
+ * 两个有颜色的角色，只有两个：
+ *   clay 陶土 = 「现在就做」  品牌、当前导航、目标匹配分、主按钮
+ *   pine 墨绿 = 「目标线索」  一切把内容和目标连起来的元素
+ * 其余全部中性。强调色预算：每屏最多 5 处陶土。
+ */
+@theme {
+  --color-ink-900: #16130f;
+  --color-ink-700: #3a342c;
+  --color-ink-500: #6e655a;
+  --color-ink-300: #c9c0b2;
+  --color-ink-200: #e5ded2;
+  --color-ink-100: #f2ede4;
+  --color-surface: #fdfbf7;
+  --color-canvas: #f8f5ee;
+
+  --color-clay-700: #a24b2e;
+  --color-clay-100: #f6e5dc;
+
+  --color-pine-700: #2a4a3f;
+  --color-pine-100: #e8eeea;
+
+  --font-sans:
+    "Inter", "SF Pro Text", system-ui, -apple-system, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-serif:
+    "Source Serif 4", Charter, Georgia, "Songti SC", "Noto Serif CJK SC", serif;
+}
+
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink-900);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 折叠区的小三角 */
+details > summary {
+  cursor: pointer;
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}

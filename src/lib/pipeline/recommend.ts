@@ -160,8 +160,10 @@ export async function generateToday(
   const survivors = candidates.filter((c) => keptIds.has(c.id));
 
   // ---- 重排 ----
-  // 工作日每个目标 1 条；周末额外给深读，所以多要一条
-  const slotsPerGoal = weekend ? 2 : 1;
+  // 工作日每个目标 1 条，周末 2 条（日常 + 深读）。
+  // 多要一条余量：分配时会因为撞源而丢弃一些，没有余量的话
+  // 后面的目标会拿不到候选。
+  const slotsPerGoal = weekend ? 3 : 2;
   const { picks, modelRunId: rerankRunId } = await provider.rerank(goalList, survivors, {
     slotsPerGoal,
   });
@@ -183,7 +185,12 @@ export async function generateToday(
   const takenSources = new Set<number>();
   const MAX_PER_WEEK = 3;
 
+  // 按 itemId 去重，不能用对象身份——不同目标会为同一篇文章各生成一个
+  // pick 对象，用 includes() 判断的话同一篇会被同时推给两个目标。
+  const takenItems = new Set<number>();
+
   const usable = (p: (typeof picks)[number]) => {
+    if (takenItems.has(p.itemId)) return false;
     const sid = srcIdByItem.get(p.itemId) ?? -1;
     if (takenSources.has(sid)) return false; // 同一个源今天最多一条
     if ((usage.get(sid) ?? 0) >= MAX_PER_WEEK) return false; // 周上限
@@ -191,6 +198,7 @@ export async function generateToday(
   };
   const take = (p: (typeof picks)[number], into: typeof picks) => {
     into.push(p);
+    takenItems.add(p.itemId);
     takenSources.add(srcIdByItem.get(p.itemId) ?? -1);
   };
 
@@ -210,11 +218,23 @@ export async function generateToday(
     if (p) take(p, daily);
   }
 
-  // 第二轮：周末的深读包，每个目标最多再加一条
+  // 第二轮：周末的深读包，每个目标最多再加一条。
+  //
+  // 这一轮**不检查同日撞源**，只保留周上限。理由：深读是额外给的槽位，
+  // 同一个强源（比如 SemiAnalysis）周末出第二篇的代价，远小于「周末什么
+  // 都没有」。实测严格去重会让深读静默为空——用户看不到任何提示，
+  // 只会以为今天没好东西。
   if (weekend) {
     for (const goal of goalList) {
-      const p = (byGoal.get(goal.id) ?? []).find((x) => usable(x) && !daily.includes(x));
-      if (p) take(p, deep);
+      const p = (byGoal.get(goal.id) ?? []).find(
+        (x) =>
+          !takenItems.has(x.itemId) &&
+          (usage.get(srcIdByItem.get(x.itemId) ?? -1) ?? 0) < MAX_PER_WEEK,
+      );
+      if (p) {
+        deep.push(p);
+        takenItems.add(p.itemId);
+      }
     }
   }
 
@@ -254,7 +274,18 @@ export async function generateToday(
             readingAdvice: p.readingAdvice,
             caveat: p.caveat,
             scaffold: p.scaffold,
-            context: { provider: provider.name, candidates: candidates.length },
+            // 今日页要显示「过滤掉多少、为什么」——这是产品主张的一部分，
+            // 主动隐藏噪声本身就是价值，所以数字必须留痕。
+            context: {
+              provider: provider.name,
+              candidates: candidates.length,
+              filtered: candidates.length - survivors.length,
+              filterReasons: Object.fromEntries(
+                Object.entries(filterReasons)
+                  .sort((a, b) => b[1] - a[1])
+                  .slice(0, 5),
+              ),
+            },
           })
           .onConflictDoNothing();
       }
