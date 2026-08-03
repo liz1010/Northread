@@ -59,7 +59,12 @@ if [[ "$already_setup" == false ]]; then
     echo "    代码已存在，git pull 更新"
     cd "$APP_DIR" && sudo -u "$APP_USER" git pull
   else
-    sudo -u "$APP_USER" git clone "$REPO_URL" "$APP_DIR"
+    # 注意：$APP_DIR 是 useradd -m 创建的 home 目录，里面有 .bashrc/.profile，
+    # 加上上面 mkdir 的 data/，直接 git clone 会因"目录非空"失败。
+    # 所以先 clone 到临时目录，再整体移入（保留 data/ 和 home 文件）。
+    rm -rf /tmp/northread-clone
+    sudo -u "$APP_USER" git clone "$REPO_URL" /tmp/northread-clone
+    sudo -u "$APP_USER" sh -c "cp -a /tmp/northread-clone/. '$APP_DIR/' && rm -rf /tmp/northread-clone"
   fi
 
   echo "==> [4/6] 安装 npm 依赖（含 better-sqlite3 编译）"
