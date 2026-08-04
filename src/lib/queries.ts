@@ -14,7 +14,16 @@ const {
 } = schema;
 
 const DAY = 86400;
-export const todayStr = () => new Date().toISOString().slice(0, 10);
+/**
+ * 用服务器本地时区的日期，而不是 UTC。
+ * 用户在中国时区（UTC+8），UTC 会在本地凌晨跨天——之前用 UTC 日期导致
+ * 「本地 8 月 4 日 0 点后」页面查的是 8-04，而 recommend 存的还是 8-03。
+ */
+export const todayStr = () => {
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+};
 
 export type RecCard = Awaited<ReturnType<typeof getTodayRecs>>[number];
 
