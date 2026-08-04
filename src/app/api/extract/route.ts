@@ -53,8 +53,9 @@ export async function POST(req: Request) {
   const [item] = await db.select().from(items).where(eq(items.id, itemId));
   if (!item) return NextResponse.json({ error: "not found" }, { status: 404 });
 
-  // 已有正文直接返回缓存
-  if (item.contentText && item.contentText.length >= 200) {
+  // 已有富文本 HTML 直接返回缓存；
+  // 只有纯文本说明是旧版本提取的（还没 HTML），重新提取以拿到富文本排版。
+  if (item.contentHtml && item.contentText && item.contentText.length >= 200) {
     return NextResponse.json({
       contentText: item.contentText,
       contentHtml: item.contentHtml ?? null,
