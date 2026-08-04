@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ArticleContent } from "../../../../components/ArticleContent.tsx";
 import { ChatPanel } from "../../../../components/ChatPanel.tsx";
 import { getReadingContext } from "../../../../lib/queries.ts";
 
@@ -100,26 +101,13 @@ export default async function ReadPage({ params }: { params: Promise<{ itemId: s
             </a>
           )}
 
-          {item.contentText ? (
-            <div className="mt-6 whitespace-pre-wrap text-[15px] leading-7 text-ink-900">
-              {item.contentText}
-            </div>
-          ) : (
-            <div className="mt-6 rounded-lg bg-canvas p-4 text-sm text-ink-500">
-              <p className="font-semibold text-ink-700">正文未能提取</p>
-              {item.summary && <p className="mt-1 text-xs leading-relaxed">{item.summary}</p>}
-              {item.url && (
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 inline-block text-xs text-pine-700 underline"
-                >
-                  打开原文阅读 ↗
-                </a>
-              )}
-            </div>
-          )}
+          {/* 正文：为空时自动实时拉取全文（ArticleContent 调 /api/extract） */}
+          <ArticleContent
+            itemId={item.id}
+            url={item.url}
+            summary={item.summary}
+            initialText={item.contentText}
+          />
         </div>
       </article>
 
