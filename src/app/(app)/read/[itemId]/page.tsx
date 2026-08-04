@@ -38,9 +38,10 @@ export default async function ReadPage({ params }: { params: Promise<{ itemId: s
   ].filter(Boolean);
 
   return (
-    <div className="flex h-[calc(100vh-7rem)] gap-4">
+    // 响应式：宽屏三栏横排（lg），窄屏纵向堆叠——保证聊天框在窄窗口下也可见
+    <div className="flex flex-col gap-4 lg:h-[calc(100vh-7rem)] lg:flex-row">
       {/* 左栏：目标线索 */}
-      <aside className="w-60 shrink-0 space-y-3 overflow-y-auto pr-1">
+      <aside className="w-full shrink-0 space-y-3 lg:w-60 lg:overflow-y-auto lg:pr-1">
         <Link
           href="/"
           className="inline-flex items-center gap-1 text-xs text-ink-500 hover:text-ink-900"
@@ -82,7 +83,7 @@ export default async function ReadPage({ params }: { params: Promise<{ itemId: s
       </aside>
 
       {/* 中栏：文章正文 */}
-      <article className="min-w-0 flex-1 overflow-y-auto rounded-xl border border-ink-200 bg-surface">
+      <article className="min-w-0 flex-1 overflow-y-auto rounded-xl border border-ink-200 bg-surface lg:h-auto">
         <div className="p-8">
           <h1 className="text-2xl font-semibold leading-snug tracking-tight">{item.title}</h1>
           {meta.length > 0 && (
@@ -122,9 +123,11 @@ export default async function ReadPage({ params }: { params: Promise<{ itemId: s
         </div>
       </article>
 
-      {/* 右栏：AI 聊天 */}
-      <aside className="w-80 shrink-0 overflow-hidden rounded-xl border border-ink-200 bg-surface">
-        <ChatPanel itemId={item.id} />
+      {/* 右栏：AI 聊天。窄屏时全宽显示在文章下方，固定高度；宽屏时靠右占满 */}
+      <aside className="w-full shrink-0 overflow-hidden rounded-xl border border-ink-200 bg-surface lg:w-72">
+        <div className="h-[28rem] lg:h-full">
+          <ChatPanel itemId={item.id} />
+        </div>
       </aside>
     </div>
   );
