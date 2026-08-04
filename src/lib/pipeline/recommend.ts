@@ -16,7 +16,12 @@ const {
 
 const DAY = 86400;
 const nowSec = () => Math.floor(Date.now() / 1000);
-const today = () => new Date().toISOString().slice(0, 10);
+/** 本地时区日期（不能 toISOString——UTC 会在本地凌晨跨天，导致推荐存到前一天） */
+const today = () => {
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+};
 
 /** 周末给深读包——硬东西需要连续时间，工作日 2 小时启动不了 */
 function isWeekend(d = new Date()): boolean {
