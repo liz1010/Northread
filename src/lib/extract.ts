@@ -65,10 +65,17 @@ export async function extractArticleBody(url: string): Promise<ExtractResult> {
       return { ok: false, error: `提取到的正文太短（${text.length} 字），可能被站点反爬拦截` };
     }
 
-    const wordCount = text.split(/\s+/).filter(Boolean).length;
-    // 中文按 ~450 字/分钟、英文按 ~200 词/分钟折中
-    const minutes = Math.max(1, Math.round(wordCount / 260));
-    return { ok: true, text, wordCount, minutes };
+    // 中英文混排时长估算：中文 ~450 字/分钟，英文 ~200 词/分钟。
+    // 不能只用 split(/\s+/)——中文没有空格，会整篇算成一个"词"导致时长严重偏低。
+    const cjkChars = (text.match(/[\u4e00-\u9fff]/g) ?? []).length;
+    const latinWords = text.split(/\s+/).filter(Boolean).length;
+    const minutes = Math.max(1, Math.round(cjkChars / 450 + latinWords / 200));
+    return {
+      ok: true,
+      text,
+      wordCount: cjkChars + latinWords,
+      minutes,
+    };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
