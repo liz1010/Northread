@@ -13,13 +13,16 @@ export function ArticleContent({
   url,
   summary,
   initialText,
+  initialHtml,
 }: {
   itemId: number;
   url: string;
   summary: string | null;
   initialText: string | null;
+  initialHtml: string | null;
 }) {
   const [text, setText] = useState<string | null>(initialText);
+  const [html, setHtml] = useState<string | null>(initialHtml);
   const [loading, setLoading] = useState(initialText ? false : true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,7 +41,10 @@ export function ArticleContent({
           if (!cancelled) setError(j?.error ?? `提取失败（${res.status}）`);
           return;
         }
-        if (!cancelled) setText(j.contentText);
+        if (!cancelled) {
+          setText(j.contentText);
+          if (j.contentHtml) setHtml(j.contentHtml);
+        }
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : String(e));
       } finally {
@@ -49,6 +55,17 @@ export function ArticleContent({
       cancelled = true;
     };
   }, [itemId, text]);
+
+  // 优先富文本 HTML（保留段落/标题/列表/引用/代码排版）
+  if (html) {
+    return (
+      <div
+        className="article-body mt-6"
+        // Readability 已剥离 script/style/iframe 等危险元素，可安全渲染
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    );
+  }
 
   if (text) {
     return (

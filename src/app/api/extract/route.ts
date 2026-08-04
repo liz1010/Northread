@@ -57,6 +57,7 @@ export async function POST(req: Request) {
   if (item.contentText && item.contentText.length >= 200) {
     return NextResponse.json({
       contentText: item.contentText,
+      contentHtml: item.contentHtml ?? null,
       wordCount: item.wordCount,
       readingMinutes: item.readingMinutes,
       cached: true,
@@ -72,6 +73,7 @@ export async function POST(req: Request) {
     .update(items)
     .set({
       contentText: result.text,
+      contentHtml: result.html || null,
       wordCount: result.wordCount,
       readingMinutes: result.minutes,
       extractStatus: "ok",
@@ -81,6 +83,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     contentText: result.text,
+    contentHtml: result.html || null,
     wordCount: result.wordCount,
     readingMinutes: result.minutes,
     cached: false,

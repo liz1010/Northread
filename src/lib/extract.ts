@@ -51,7 +51,7 @@ async function getHtml(url: string): Promise<string> {
 }
 
 export type ExtractResult =
-  | { ok: true; text: string; wordCount: number; minutes: number }
+  | { ok: true; text: string; html: string; wordCount: number; minutes: number }
   | { ok: false; error: string };
 
 export async function extractArticleBody(url: string): Promise<ExtractResult> {
@@ -65,6 +65,10 @@ export async function extractArticleBody(url: string): Promise<ExtractResult> {
       return { ok: false, error: `提取到的正文太短（${text.length} 字），可能被站点反爬拦截` };
     }
 
+    // 结构化 HTML：Readability 已剥离 script/style/iframe 等危险元素，可安全渲染。
+    // 保留段落、标题、列表、引用、代码块等排版，阅读体验远好于纯文本。
+    const structuredHtml = article?.content ?? "";
+
     // 中英文混排时长估算：中文 ~450 字/分钟，英文 ~200 词/分钟。
     // 不能只用 split(/\s+/)——中文没有空格，会整篇算成一个"词"导致时长严重偏低。
     const cjkChars = (text.match(/[\u4e00-\u9fff]/g) ?? []).length;
@@ -73,6 +77,7 @@ export async function extractArticleBody(url: string): Promise<ExtractResult> {
     return {
       ok: true,
       text,
+      html: structuredHtml,
       wordCount: cjkChars + latinWords,
       minutes,
     };

@@ -1,4 +1,5 @@
 import { RecCard } from "../../components/RecCard.tsx";
+import { RefreshButton } from "../../components/RefreshButton.tsx";
 import {
   getFailedSources,
   getFilterStats,
@@ -24,12 +25,15 @@ export default async function Today() {
 
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">今日</h1>
-        <p className="mt-1 text-sm text-ink-500">
-          {d.getMonth() + 1} 月 {d.getDate()} 日 星期{WEEKDAY[d.getDay()]}
-          {stats.candidates > 0 && ` · 从 ${stats.candidates} 条候选里选出 ${daily.length} 条`}
-        </p>
+      <header className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">今日</h1>
+          <p className="mt-1 text-sm text-ink-500">
+            {d.getMonth() + 1} 月 {d.getDate()} 日 星期{WEEKDAY[d.getDay()]}
+            {stats.candidates > 0 && ` · 从 ${stats.candidates} 条候选里选出 ${daily.length} 条`}
+          </p>
+        </div>
+        <RefreshButton />
       </header>
 
       {stats.provider === "mock" && (

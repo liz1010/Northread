@@ -108,6 +108,7 @@ export default async function ReadPage({ params }: { params: Promise<{ itemId: s
             url={item.url}
             summary={item.summary}
             initialText={item.contentText}
+            initialHtml={item.contentHtml}
           />
         </div>
       </article>

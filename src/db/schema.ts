@@ -162,6 +162,8 @@ export const items = sqliteTable(
     summary: text("summary"),
     /** 提取出的正文。版权内容不长期保留，见实施计划 §8.2 */
     contentText: text("content_text"),
+    /** Readability 提取的结构化正文 HTML（保留段落/标题/列表/引用/代码排版） */
+    contentHtml: text("content_html"),
     lang: text("lang"),
     wordCount: integer("word_count"),
     readingMinutes: integer("reading_minutes"),
