@@ -196,15 +196,25 @@ export function RecCard(p: Props) {
 
       {/* 操作 */}
       <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-ink-200 pt-3">
-        <a
-          href={p.url}
-          target="_blank"
-          rel="noreferrer"
+        {/* 立即阅读 → 进入站内阅读工作台（右栏有 AI 助手），而不是跳外部原文 */}
+        <Link
+          href={`/read/${p.itemId}`}
           onClick={() => act(() => setState(p.recId, "reading"))}
           className="rounded-lg bg-clay-700 px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90"
         >
           立即阅读
-        </a>
+        </Link>
+        {p.url && (
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noreferrer"
+            title="在浏览器打开原文"
+            className="rounded-lg border border-ink-200 px-3 py-1.5 text-xs text-ink-500 hover:bg-ink-100"
+          >
+            原文 ↗
+          </a>
+        )}
         <button
           onClick={() => act(() => setState(p.recId, "later"))}
           className="rounded-lg border border-ink-200 px-3 py-1.5 text-xs hover:bg-ink-100"
