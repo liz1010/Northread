@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { spawn } from "node:child_process";
 
 import { NextResponse } from "next/server";
@@ -7,12 +8,17 @@ import { COOKIE, verify } from "../../../lib/auth.ts";
 /**
  * 一键刷新：重新抓取所有源 + 重新生成今日推荐。
  *
- * 抓取和推荐耗时长（1~2 分钟），所以这里异步启动后台进程立即返回，
- * 前端提示用户稍后刷新查看。任务日志写到 /var/log/northread/。
+ * - POST /api/refresh  启动后台任务，立即返回；已有任务在跑则返回 busy。
+ * - GET  /api/refresh  查询是否还在抓取（前端轮询用）。
+ *
+ * 后台任务通过标记文件 /srv/northread/data/.refresh-running 表示"进行中"，
+ * 任务完成自动删除。前端轮询到 running=false 后调 router.refresh() 呈现新内容。
  */
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const MARK = "/srv/northread/data/.refresh-running";
 
 function parseCookies(header: string): Record<string, string> {
   const out: Record<string, string> = {};
@@ -23,21 +29,41 @@ function parseCookies(header: string): Record<string, string> {
   return out;
 }
 
-export async function POST(req: Request) {
+async function authorized(req: Request): Promise<boolean> {
   const secret = process.env.NORTHREAD_SESSION_SECRET;
-  if (!secret) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!secret) return false;
   const cookies = parseCookies(req.headers.get("cookie") ?? "");
   const token = cookies[COOKIE];
-  if (!token || !(await verify(secret, decodeURIComponent(token)))) {
+  return !!token && (await verify(secret, decodeURIComponent(token)));
+}
+
+/** 查询抓取状态 */
+export async function GET(req: Request) {
+  if (!(await authorized(req))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  return NextResponse.json({ running: existsSync(MARK) });
+}
+
+/** 启动后台抓取 + 推荐 */
+export async function POST(req: Request) {
+  if (!(await authorized(req))) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
+  // 已有任务在跑就不重复启动
+  if (existsSync(MARK)) {
+    return NextResponse.json({ ok: true, busy: true, message: "正在抓取中…" });
   }
 
   const cmd = [
     "set -a",
     ". .env.production",
     "set +a",
+    `touch ${MARK}`,
     "node scripts/ingest.ts >> /var/log/northread/ingest.log 2>&1",
     "node scripts/recommend.ts >> /var/log/northread/recommend.log 2>&1",
+    `rm -f ${MARK}`,
     "echo REFRESH_DONE >> /var/log/northread/refresh.log",
   ].join(" && ");
 
@@ -52,6 +78,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     ok: true,
-    message: "已开始更新：重新抓取 + 重新生成推荐，约 1~2 分钟后刷新查看",
+    busy: false,
+    message: "已开始更新：正在重新抓取并生成推荐，完成后自动刷新",
   });
 }
