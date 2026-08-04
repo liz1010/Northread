@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { ArticleContent } from "../../../../components/ArticleContent.tsx";
-import { ChatPanel } from "../../../../components/ChatPanel.tsx";
-import { getReadingContext } from "../../../../lib/queries.ts";
+import { ArticleContent } from "../../../components/ArticleContent.tsx";
+import { ChatPanel } from "../../../components/ChatPanel.tsx";
+import { getReadingContext } from "../../../lib/queries.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -39,10 +39,11 @@ export default async function ReadPage({ params }: { params: Promise<{ itemId: s
   ].filter(Boolean);
 
   return (
-    // 响应式：宽屏三栏横排（lg），窄屏纵向堆叠——保证聊天框在窄窗口下也可见
-    <div className="flex flex-col gap-4 lg:h-[calc(100vh-7rem)] lg:flex-row">
+    // 全屏阅读工作台：没有外层导航，宽屏三栏（lg），窄屏纵向堆叠。
+    // 左栏目标线索最窄，中栏阅读区占满剩余宽度。
+    <div className="flex flex-col gap-4 p-4 lg:h-[calc(100vh-3rem)] lg:flex-row lg:gap-6 lg:p-6">
       {/* 左栏：目标线索 */}
-      <aside className="w-full shrink-0 space-y-3 lg:w-60 lg:overflow-y-auto lg:pr-1">
+      <aside className="w-full shrink-0 space-y-3 lg:w-52 lg:overflow-y-auto lg:pr-1">
         <Link
           href="/"
           className="inline-flex items-center gap-1 text-xs text-ink-500 hover:text-ink-900"
