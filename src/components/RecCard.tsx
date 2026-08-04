@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 
 import { submitFeedback, setState } from "../app/actions.ts";
@@ -90,9 +91,20 @@ export function RecCard(p: Props) {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <h3 className="font-serif text-lg leading-snug font-semibold">
-            <a href={p.url} target="_blank" rel="noreferrer" className="hover:underline">
+            <Link href={`/read/${p.itemId}`} className="hover:underline">
               {p.title}
-            </a>
+            </Link>
+            {p.url && (
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                title="查看原文"
+                className="ml-2 align-middle text-xs text-ink-300 hover:text-ink-500"
+              >
+                ↗
+              </a>
+            )}
           </h3>
           <p className="mt-1 text-xs text-ink-500">
             {p.sourceName ?? "手动添加"}

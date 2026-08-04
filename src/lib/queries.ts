@@ -201,3 +201,39 @@ export async function getInventory() {
     .from(dailyRecommendations);
   return { total: Number(total), recent: Number(recent), used: Number(used) };
 }
+
+/** 阅读工作台：文章正文 + 推荐上下文（目标、评分分项、来源） */
+export async function getReadingContext(itemId: number) {
+  const [item] = await db.select().from(items).where(eq(items.id, itemId));
+  if (!item) return null;
+
+  let rec: (typeof dailyRecommendations.$inferSelect) | null = null;
+  let goal: (typeof goals.$inferSelect) | null = null;
+  let score: (typeof itemGoalScores.$inferSelect) | null = null;
+  let source: (typeof sources.$inferSelect) | null = null;
+
+  if (item.sourceId) {
+    [source] = await db.select().from(sources).where(eq(sources.id, item.sourceId));
+  }
+  [rec] = await db
+    .select()
+    .from(dailyRecommendations)
+    .where(eq(dailyRecommendations.itemId, itemId))
+    .orderBy(desc(dailyRecommendations.date))
+    .limit(1);
+  if (rec) {
+    [goal] = await db.select().from(goals).where(eq(goals.id, rec.goalId));
+    [score] = await db
+      .select()
+      .from(itemGoalScores)
+      .where(
+        and(
+          eq(itemGoalScores.itemId, itemId),
+          eq(itemGoalScores.goalId, rec.goalId),
+          eq(itemGoalScores.stage, "rerank"),
+        ),
+      )
+      .limit(1);
+  }
+  return { item, rec, goal, score, source };
+}

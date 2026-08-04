@@ -20,6 +20,6 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // 登录页、静态资源、favicon 不拦
-  matcher: ["/((?!login|_next/static|_next/image|favicon.ico).*)"],
+  // 登录页、静态资源、favicon 不拦；/api 也不拦，由各路由自己校验会话
+  matcher: ["/((?!api|login|_next/static|_next/image|favicon.ico).*)"],
 };
