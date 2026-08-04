@@ -35,7 +35,8 @@ export function RefreshButton() {
       try {
         const r = await fetch("/api/refresh", { method: "GET" });
         const s = await r.json().catch(() => null);
-        if (s && !s.running) {
+        if (!s) return;
+        if (!s.running) {
           if (pollRef.current) {
             clearInterval(pollRef.current);
             pollRef.current = null;
@@ -44,6 +45,13 @@ export function RefreshButton() {
           setMsg("更新完成 ✓");
           // 重新请求 server component，自动呈现新抓取与新推荐
           router.refresh();
+        } else {
+          // 显示进行到哪个阶段
+          setMsg(
+            s.stage === "recommend"
+              ? "正在生成今日推荐（DeepSeek 评分）…"
+              : "正在抓取 31 个源…",
+          );
         }
       } catch {
         /* 网络抖动忽略，下轮再试 */

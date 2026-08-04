@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { spawn } from "node:child_process";
 
 import { NextResponse } from "next/server";
@@ -18,7 +18,7 @@ import { COOKIE, verify } from "../../../lib/auth.ts";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MARK = "/srv/northread/data/.refresh-running";
+const STAGE = "/srv/northread/data/.refresh-stage";
 
 function parseCookies(header: string): Record<string, string> {
   const out: Record<string, string> = {};
@@ -37,12 +37,16 @@ async function authorized(req: Request): Promise<boolean> {
   return !!token && (await verify(secret, decodeURIComponent(token)));
 }
 
-/** 查询抓取状态 */
+/** 查询抓取状态：running + 当前阶段（ingest / recommend） */
 export async function GET(req: Request) {
   if (!(await authorized(req))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
-  return NextResponse.json({ running: existsSync(MARK) });
+  if (!existsSync(STAGE)) {
+    return NextResponse.json({ running: false, stage: null });
+  }
+  const stage = readFileSync(STAGE, "utf8").trim();
+  return NextResponse.json({ running: true, stage: stage || "ingest" });
 }
 
 /** 启动后台抓取 + 推荐 */
@@ -52,7 +56,7 @@ export async function POST(req: Request) {
   }
 
   // 已有任务在跑就不重复启动
-  if (existsSync(MARK)) {
+  if (existsSync(STAGE)) {
     return NextResponse.json({ ok: true, busy: true, message: "正在抓取中…" });
   }
 
@@ -60,10 +64,11 @@ export async function POST(req: Request) {
     "set -a",
     ". .env.production",
     "set +a",
-    `touch ${MARK}`,
+    `printf 'ingest' > ${STAGE}`,
     "node scripts/ingest.ts >> /var/log/northread/ingest.log 2>&1",
+    `printf 'recommend' > ${STAGE}`,
     "node scripts/recommend.ts >> /var/log/northread/recommend.log 2>&1",
-    `rm -f ${MARK}`,
+    `rm -f ${STAGE}`,
     "echo REFRESH_DONE >> /var/log/northread/refresh.log",
   ].join(" && ");
 
