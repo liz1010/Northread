@@ -225,38 +225,68 @@ ${goal.id === "cognition" ? `\n这个目标的评分标尺如下，拆子目标�
           `- ${g.id}：${g.title}\n  当前水平：${g.currentLevel ?? "未填"}\n  不想看到：${g.avoid ?? "无"}`,
       )
       .join("\n");
-    const itemBlock = items
-      .map(
-        (i) =>
-          `[${i.id}] ${i.title}\n  来源：${i.sourceName}\n  摘要：${(i.summary ?? "（无摘要）").slice(0, 400)}`,
-      )
-      .join("\n\n");
 
-    return this.call<{ verdicts: PrefilterVerdict[] }>({
-      purpose: "prefilter",
-      model: this.prefilterModel,
-      system,
-      user: `目标：\n${goalBlock}\n\n候选内容：\n${itemBlock}`,
-      itemIds: items.map((i) => i.id),
-      validate: (raw) => {
-        const o = raw as { verdicts?: unknown };
-        if (!Array.isArray(o.verdicts)) throw new Error("返回里没有 verdicts 数组");
-        const known = new Set(items.map((i) => i.id));
-        const goalIds = new Set(goals.map((g) => g.id));
-        const verdicts = o.verdicts
-          .filter((v): v is Record<string, unknown> => !!v && typeof v === "object")
-          .map((v) => ({
-            itemId: Number(v.itemId),
-            goalId: goalIds.has(String(v.goalId)) ? String(v.goalId) : null,
-            relevance: Number(v.relevance ?? 0),
-            keep: Boolean(v.keep),
-            reason: String(v.reason ?? ""),
-          }))
-          // 模型偶尔会编造不存在的 id，丢掉
-          .filter((v) => known.has(v.itemId));
-        return { verdicts };
-      },
-    }).then((r) => ({ verdicts: r.data.verdicts, modelRunId: r.modelRunId }));
+    // 一次塞 120 条容易让模型「偷懒」返回空数组（实测发生过：output_tokens=7）。
+    // 分批 + 空结果重试 + 保守兜底，保证初筛永远有输出。
+    const BATCH = 50;
+    const verdicts: PrefilterVerdict[] = [];
+    let modelRunId: number | null = null;
+
+    for (let i = 0; i < items.length; i += BATCH) {
+      const batch = items.slice(i, i + BATCH);
+      const itemBlock = batch
+        .map(
+          (it) =>
+            `[${it.id}] ${it.title}\n  来源：${it.sourceName}\n  摘要：${(it.summary ?? "（无摘要）").slice(0, 400)}`,
+        )
+        .join("\n\n");
+
+      let batchVerdicts: PrefilterVerdict[] = [];
+      // 模型偶尔会返回空数组或全部 id 不匹配——重试 3 次
+      for (let attempt = 0; attempt < 3 && !batchVerdicts.length; attempt++) {
+        const res = await this.call<{ verdicts: PrefilterVerdict[] }>({
+          purpose: "prefilter",
+          model: this.prefilterModel,
+          system,
+          user: `目标：\n${goalBlock}\n\n候选内容（第 ${i / BATCH + 1} 批）：\n${itemBlock}`,
+          itemIds: batch.map((it) => it.id),
+          validate: (raw) => {
+            const o = raw as { verdicts?: unknown };
+            if (!Array.isArray(o.verdicts)) throw new Error("返回里没有 verdicts 数组");
+            const known = new Set(batch.map((it) => it.id));
+            const goalIds = new Set(goals.map((g) => g.id));
+            const vs = o.verdicts
+              .filter((v): v is Record<string, unknown> => !!v && typeof v === "object")
+              .map((v) => ({
+                itemId: Number(v.itemId),
+                goalId: goalIds.has(String(v.goalId)) ? String(v.goalId) : null,
+                relevance: Number(v.relevance ?? 0),
+                keep: Boolean(v.keep),
+                reason: String(v.reason ?? ""),
+              }))
+              // 模型偶尔会编造不存在的 id，丢掉
+              .filter((v) => known.has(v.itemId));
+            return { verdicts: vs };
+          },
+        });
+        modelRunId = res.modelRunId ?? modelRunId;
+        batchVerdicts = res.data.verdicts;
+      }
+      if (!batchVerdicts.length) {
+        // 重试仍空——保守兜底：全部保留，让重排阶段做精细判断。
+        // 初筛的原则本来就是「宁可放过，不要错杀」。
+        batchVerdicts = batch.map((it) => ({
+          itemId: it.id,
+          goalId: null,
+          relevance: 0.3,
+          keep: true,
+          reason: "初筛未返回判定，保守保留",
+        }));
+      }
+      verdicts.push(...batchVerdicts);
+    }
+
+    return { verdicts, modelRunId };
   }
 
   async rerank(goals: GoalContext[], items: CandidateItem[], opts: { slotsPerGoal: number }) {
