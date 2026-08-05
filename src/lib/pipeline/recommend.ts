@@ -292,7 +292,31 @@ export async function generateToday(
               ),
             },
           })
-          .onConflictDoNothing();
+          // 同一天刷新时覆盖旧推荐（用户对当前推荐不满意，点刷新换一批）。
+          // 跨天自然插入新行；已推荐过的文章仍会被候选排除。
+          .onConflictDoUpdate({
+            target: [dailyRecommendations.date, dailyRecommendations.slot, dailyRecommendations.rank],
+            set: {
+              itemId: p.itemId,
+              goalId: p.goalId,
+              nodeId: p.nodeId,
+              reason: p.reason,
+              confidence: p.confidence,
+              readingAdvice: p.readingAdvice,
+              caveat: p.caveat,
+              scaffold: p.scaffold,
+              context: {
+                provider: provider.name,
+                candidates: candidates.length,
+                filtered: candidates.length - survivors.length,
+                filterReasons: Object.fromEntries(
+                  Object.entries(filterReasons)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5),
+                ),
+              },
+            },
+          });
       }
     };
     await write(daily, "daily");
