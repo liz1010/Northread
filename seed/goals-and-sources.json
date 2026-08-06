@@ -84,295 +84,388 @@
     }
   ],
 
-  "sources": [
-    {
-      "name": "@Phoenixyin13（via nitter）",
-      "url": "https://nitter.net/Phoenixyin13/rss",
-      "lang": "zh",
-      "globalWeight": 2.0,
-      "goalWeights": { "cognition": 2.0, "semiconductor-research": 1.0 },
-      "maxPerWeek": 7,
-      "fragile": true,
-      "fallbackNote": "nitter 镜像随时可能挂。抓不到时界面会明确显示「这个源失败了」，不会默默少推内容；届时用手动粘贴补上。",
-      "note": "既是信源也是认知标尺的来源。他发帖很密（两天 19 条），所以周上限给到 7。"
+    "sources": [
+  {
+    "name": "@Phoenixyin13（via nitter）",
+    "url": "https://nitter.net/Phoenixyin13/rss",
+    "lang": "zh",
+    "globalWeight": 2,
+    "goalWeights": {
+      "cognition": 2,
+      "semiconductor-research": 1
     },
-
-    {
-      "name": "SemiAnalysis",
-      "url": "https://semianalysis.com/feed/",
-      "lang": "en",
-      "globalWeight": 2.0,
-      "goalWeights": { "semiconductor-research": 2.0 },
-      "maxPerWeek": 4,
-      "note": "Dylan Patel。半导体产业分析里技术深度和产业信息结合得最好的，投研方向的第一优先级。"
+    "maxPerWeek": 7,
+    "fragile": true,
+    "fallbackNote": "nitter 镜像随时可能挂。抓不到时界面会明确显示「这个源失败了」，不会默默少推内容；届时用手动粘贴补上。",
+    "note": "既是信源也是认知标尺的来源。他发帖很密（两天 19 条），所以周上限给到 7。"
+  },
+  {
+    "name": "SemiAnalysis",
+    "url": "https://semianalysis.com/feed/",
+    "lang": "en",
+    "globalWeight": 2,
+    "goalWeights": {
+      "semiconductor-research": 2
     },
-    {
-      "name": "Fabricated Knowledge",
-      "url": "https://www.fabricatedknowledge.com/feed",
-      "lang": "en",
-      "globalWeight": 2.0,
-      "goalWeights": { "semiconductor-research": 2.0 },
-      "maxPerWeek": 3,
-      "note": "Doug O'Laughlin。半导体投研的标杆写法——正好是你「期望产出」要对标的东西。"
+    "maxPerWeek": 4,
+    "note": "Dylan Patel。半导体产业分析里技术深度和产业信息结合得最好的，投研方向的第一优先级。",
+    "about": "半导体产业深度分析博客（作者 Dylan Patel），技术细节与行业一手信息结合最好的独立信源，投研界权威性很高。"
+  },
+  {
+    "name": "Fabricated Knowledge",
+    "url": "https://www.fabricatedknowledge.com/feed",
+    "lang": "en",
+    "globalWeight": 2,
+    "goalWeights": {
+      "semiconductor-research": 2
     },
-    {
-      "name": "Stratechery",
-      "url": "https://stratechery.com/feed/",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "semiconductor-research": 1.5, "cognition": 1.0 },
-      "maxPerWeek": 3,
-      "note": "Ben Thompson。商业战略分析的框架感很强，产业结构怎么想值得学。免费源只有部分内容。"
+    "maxPerWeek": 3,
+    "note": "Doug O'Laughlin。半导体投研的标杆写法——正好是你「期望产出」要对标的东西。",
+    "about": "Doug O'Laughlin 的半导体投资分析博客，独立信源，投研写作的标杆，专业性高、口碑好。"
+  },
+  {
+    "name": "Stratechery",
+    "url": "https://stratechery.com/feed/",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "semiconductor-research": 1.5,
+      "cognition": 1
     },
-    {
-      "name": "The Chip Letter",
-      "url": "https://thechipletter.substack.com/feed",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "semiconductor-research": 1.5 },
-      "maxPerWeek": 2,
-      "note": "半导体产业史。理解今天的格局怎么来的，对判断周期有用。"
+    "maxPerWeek": 3,
+    "note": "Ben Thompson。商业战略分析的框架感很强，产业结构怎么想值得学。免费源只有部分内容。",
+    "about": "Ben Thompson 的商业与技术战略分析博客，框架感极强，科技商业评论界的权威之一。"
+  },
+  {
+    "name": "The Chip Letter",
+    "url": "https://thechipletter.substack.com/feed",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "semiconductor-research": 1.5
     },
-    {
-      "name": "Asianometry",
-      "url": "https://www.asianometry.com/feed",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "semiconductor-research": 1.5 },
-      "maxPerWeek": 2,
-      "note": "东亚半导体产业链，设备和材料环节讲得细。"
+    "maxPerWeek": 2,
+    "note": "半导体产业史。理解今天的格局怎么来的，对判断周期有用。",
+    "about": "半导体产业史与技术趋势博客，历史视角扎实，内容专业可靠。"
+  },
+  {
+    "name": "Asianometry",
+    "url": "https://www.asianometry.com/feed",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "semiconductor-research": 1.5
     },
-    {
-      "name": "Semiconductor Engineering",
-      "url": "https://semiengineering.com/feed/",
-      "lang": "en",
-      "globalWeight": 1.2,
-      "goalWeights": { "semiconductor-research": 1.2 },
-      "maxPerWeek": 3,
-      "note": "偏技术工程侧的行业媒体，更新频繁，靠初筛过滤。"
+    "maxPerWeek": 2,
+    "note": "东亚半导体产业链，设备和材料环节讲得细。",
+    "about": "东亚半导体产业链分析（作者 Jon），设备和材料环节讲得细，内容扎实。"
+  },
+  {
+    "name": "Semiconductor Engineering",
+    "url": "https://semiengineering.com/feed/",
+    "lang": "en",
+    "globalWeight": 1.2,
+    "goalWeights": {
+      "semiconductor-research": 1.2
     },
-    {
-      "name": "Chips and Cheese",
-      "url": "https://chipsandcheese.com/feed/",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "semiconductor-research": 1.5 },
-      "maxPerWeek": 2,
-      "note": "微架构实测。你技术底子在这儿，能读得比大多数投研的人深，是你的差异化优势。"
+    "maxPerWeek": 3,
+    "note": "偏技术工程侧的行业媒体，更新频繁，靠初筛过滤。",
+    "about": "半导体行业权威技术媒体，专注芯片设计、制造、EDA 与验证，工程侧可信度高。"
+  },
+  {
+    "name": "Chips and Cheese",
+    "url": "https://chipsandcheese.com/feed/",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "semiconductor-research": 1.5
     },
-    {
-      "name": "EE Times",
-      "url": "https://www.eetimes.com/feed/",
-      "lang": "en",
-      "globalWeight": 0.8,
-      "goalWeights": { "semiconductor-research": 0.8 },
-      "maxPerWeek": 2,
-      "note": "行业新闻，通稿多、密度低，给低权重。"
+    "maxPerWeek": 2,
+    "note": "微架构实测。你技术底子在这儿，能读得比大多数投研的人深，是你的差异化优势。",
+    "about": "芯片微架构深度实测博客，技术含量高，硬核硬件向，专业性强。"
+  },
+  {
+    "name": "EE Times",
+    "url": "https://www.eetimes.com/feed/",
+    "lang": "en",
+    "globalWeight": 0.8,
+    "goalWeights": {
+      "semiconductor-research": 0.8
     },
-    {
-      "name": "Construction Physics",
-      "url": "https://www.construction-physics.com/feed",
-      "lang": "en",
-      "globalWeight": 1.0,
-      "goalWeights": { "semiconductor-research": 1.0, "cognition": 1.0 },
-      "maxPerWeek": 1,
-      "note": "制造业和基建的量化分析。看别人怎么把产业问题做成可核对的数字——对标尺第四条正对口。"
+    "maxPerWeek": 2,
+    "note": "行业新闻，通稿多、密度低，给低权重。",
+    "about": "半导体与电子行业老牌媒体，历史悠久、权威，但行业新闻偏通稿、信息密度较低。"
+  },
+  {
+    "name": "Construction Physics",
+    "url": "https://www.construction-physics.com/feed",
+    "lang": "en",
+    "globalWeight": 1,
+    "goalWeights": {
+      "semiconductor-research": 1,
+      "cognition": 1
     },
-
-    {
-      "name": "Astral Codex Ten",
-      "url": "https://www.astralcodexten.com/feed",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "cognition": 1.5 },
-      "maxPerWeek": 2,
-      "note": "Scott Alexander。长链条推理和自我证伪的示范，正对标尺第三条。"
+    "maxPerWeek": 1,
+    "note": "制造业和基建的量化分析。看别人怎么把产业问题做成可核对的数字——对标尺第四条正对口。",
+    "about": "Brian Potter 的制造业/建筑业量化分析博客，把工程问题做成可核对的数字，分析扎实。"
+  },
+  {
+    "name": "Astral Codex Ten",
+    "url": "https://www.astralcodexten.com/feed",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "cognition": 1.5
     },
-    {
-      "name": "Quanta Magazine",
-      "url": "https://www.quantamagazine.org/feed/",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "cognition": 1.5 },
-      "maxPerWeek": 2,
-      "note": "复杂系统、涌现、数学物理前沿——和标尺第六条同一个谱系。"
+    "maxPerWeek": 2,
+    "note": "Scott Alexander。长链条推理和自我证伪的示范，正对标尺第三条。",
+    "about": "Scott Alexander 的长文博客（前 Slate Star Codex），以长链条推理著称，圈内影响力很大。"
+  },
+  {
+    "name": "Quanta Magazine",
+    "url": "https://www.quantamagazine.org/feed/",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "cognition": 1.5
     },
-    {
-      "name": "Shtetl-Optimized（Scott Aaronson）",
-      "url": "https://scottaaronson.blog/?feed=rss2",
-      "lang": "en",
-      "globalWeight": 1.2,
-      "goalWeights": { "cognition": 1.2 },
-      "maxPerWeek": 1,
-      "note": "计算复杂性与科学哲学，说话极其精确。"
+    "maxPerWeek": 2,
+    "note": "复杂系统、涌现、数学物理前沿——和标尺第六条同一个谱系。",
+    "about": "西蒙斯基金会出品的科普媒体，专注数学、物理与计算机科学前沿，报道严谨、权威性高。"
+  },
+  {
+    "name": "Shtetl-Optimized（Scott Aaronson）",
+    "url": "https://scottaaronson.blog/?feed=rss2",
+    "lang": "en",
+    "globalWeight": 1.2,
+    "goalWeights": {
+      "cognition": 1.2
     },
-    {
-      "name": "Aeon",
-      "url": "https://aeon.co/feed.rss",
-      "lang": "en",
-      "globalWeight": 1.0,
-      "goalWeights": { "cognition": 1.0 },
-      "maxPerWeek": 2,
-      "note": "科学哲学长文。质量参差，靠初筛挑。"
+    "maxPerWeek": 1,
+    "note": "计算复杂性与科学哲学，说话极其精确。",
+    "about": "Scott Aaronson 的个人博客，量子计算与计算复杂性领域权威学者本人，内容精确可靠。"
+  },
+  {
+    "name": "Aeon",
+    "url": "https://aeon.co/feed.rss",
+    "lang": "en",
+    "globalWeight": 1,
+    "goalWeights": {
+      "cognition": 1
     },
-    {
-      "name": "Farnam Street",
-      "url": "https://fs.blog/feed/",
-      "lang": "en",
-      "globalWeight": 0.6,
-      "goalWeights": { "cognition": 0.6 },
-      "maxPerWeek": 1,
-      "note": "刻意压低。「思维模型」这个题材离鸡汤只有一步之遥，正好用标尺第一条（预制菜检测）来检验过滤有没有效。"
+    "maxPerWeek": 2,
+    "note": "科学哲学长文。质量参差，靠初筛挑。",
+    "about": "科学与哲学主题的长文杂志，选题深刻但质量参差，权威性中等，需自行甄别。"
+  },
+  {
+    "name": "Farnam Street",
+    "url": "https://fs.blog/feed/",
+    "lang": "en",
+    "globalWeight": 0.6,
+    "goalWeights": {
+      "cognition": 0.6
     },
-    {
-      "name": "Nautilus",
-      "url": "https://nautil.us/feed/",
-      "lang": "en",
-      "globalWeight": 0.8,
-      "goalWeights": { "cognition": 0.8 },
-      "maxPerWeek": 1,
-      "note": "科学人文，偏科普。"
+    "maxPerWeek": 1,
+    "note": "刻意压低。「思维模型」这个题材离鸡汤只有一步之遥，正好用标尺第一条（预制菜检测）来检验过滤有没有效。",
+    "about": "思维模型与决策主题博客，题材易鸡汤化，权威性一般，阅读时注意甄别。"
+  },
+  {
+    "name": "Nautilus",
+    "url": "https://nautil.us/feed/",
+    "lang": "en",
+    "globalWeight": 0.8,
+    "goalWeights": {
+      "cognition": 0.8
     },
-    {
-      "name": "LessWrong",
-      "url": "https://www.lesswrong.com/feed.xml",
-      "lang": "en",
-      "globalWeight": 0.8,
-      "goalWeights": { "cognition": 0.8 },
-      "maxPerWeek": 1,
-      "note": "推理方法论。社区口味重，质量方差很大。"
+    "maxPerWeek": 1,
+    "note": "科学人文，偏科普。",
+    "about": "科学人文杂志，偏科普向，可读性好，权威性中等。"
+  },
+  {
+    "name": "LessWrong",
+    "url": "https://www.lesswrong.com/feed.xml",
+    "lang": "en",
+    "globalWeight": 0.8,
+    "goalWeights": {
+      "cognition": 0.8
     },
-    {
-      "name": "Overcoming Bias",
-      "url": "https://www.overcomingbias.com/feed",
-      "lang": "en",
-      "globalWeight": 0.8,
-      "goalWeights": { "cognition": 0.8 },
-      "maxPerWeek": 1,
-      "note": "Robin Hanson。观点常常反直觉，适合当反方观点配额。"
+    "maxPerWeek": 1,
+    "note": "推理方法论。社区口味重，质量方差很大。",
+    "about": "理性主义社区博客，专注推理方法论，社区影响力大但质量方差大，非官方权威。"
+  },
+  {
+    "name": "Overcoming Bias",
+    "url": "https://www.overcomingbias.com/feed",
+    "lang": "en",
+    "globalWeight": 0.8,
+    "goalWeights": {
+      "cognition": 0.8
     },
-
-    {
-      "name": "Simon Willison",
-      "url": "https://simonwillison.net/atom/everything/",
-      "lang": "en",
-      "globalWeight": 2.0,
-      "goalWeights": { "llm-craft": 2.0 },
-      "maxPerWeek": 5,
-      "note": "跟趋势 + 怎么用，这个方向的第一优先级。他更新极频繁（30 条/期），所以周上限给 5 但要靠初筛严筛。"
+    "maxPerWeek": 1,
+    "note": "Robin Hanson。观点常常反直觉，适合当反方观点配额。",
+    "about": "Robin Hanson 的个人博客，观点常反直觉，提供难得的反方视角，权威性中等。"
+  },
+  {
+    "name": "Simon Willison",
+    "url": "https://simonwillison.net/atom/everything/",
+    "lang": "en",
+    "globalWeight": 2,
+    "goalWeights": {
+      "llm-craft": 2
     },
-    {
-      "name": "Interconnects（Nathan Lambert）",
-      "url": "https://www.interconnects.ai/feed",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "llm-craft": 1.8 },
-      "maxPerWeek": 2,
-      "note": "后训练与 RL 的深度分析。是少数既懂原理又讲产业格局的写作者。"
+    "maxPerWeek": 5,
+    "note": "跟趋势 + 怎么用，这个方向的第一优先级。他更新极频繁（30 条/期），所以周上限给 5 但要靠初筛严筛。",
+    "about": "知名开发者 Simon Willison 的博客，AI 工具实操与趋势第一线，作者权威、内容可信。"
+  },
+  {
+    "name": "Interconnects（Nathan Lambert）",
+    "url": "https://www.interconnects.ai/feed",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "llm-craft": 1.8
     },
-    {
-      "name": "Lil'Log（Lilian Weng）",
-      "url": "https://lilianweng.github.io/index.xml",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "llm-craft": 1.8 },
-      "maxPerWeek": 1,
-      "note": "原理综述。更新很慢但每篇都是系统性的，对「理解」这个子方向最重要。"
+    "maxPerWeek": 2,
+    "note": "后训练与 RL 的深度分析。是少数既懂原理又讲产业格局的写作者。",
+    "about": "Nathan Lambert（AI 研究者）的大模型后训练与强化学习深度分析，作者专业、内容权威。"
+  },
+  {
+    "name": "Lil'Log（Lilian Weng）",
+    "url": "https://lilianweng.github.io/index.xml",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "llm-craft": 1.8
     },
-    {
-      "name": "Latent Space",
-      "url": "https://www.latent.space/feed",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "llm-craft": 1.5 },
-      "maxPerWeek": 2,
-      "note": "AI 工程实践，正对「build 更好的 tool」。"
+    "maxPerWeek": 1,
+    "note": "原理综述。更新很慢但每篇都是系统性的，对「理解」这个子方向最重要。",
+    "about": "Lilian Weng（OpenAI 研究员）的 AI 原理综述博客，系统性最强，权威性高。"
+  },
+  {
+    "name": "Latent Space",
+    "url": "https://www.latent.space/feed",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "llm-craft": 1.5
     },
-    {
-      "name": "Chip Huyen",
-      "url": "https://huyenchip.com/feed.xml",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "llm-craft": 1.5 },
-      "maxPerWeek": 1,
-      "note": "ML 系统设计。讲工程取舍讲得最扎实的一个，更新慢。"
+    "maxPerWeek": 2,
+    "note": "AI 工程实践，正对「build 更好的 tool」。",
+    "about": "AI 工程实践媒体/播客，聚焦大模型落地，在业界认可度较高。"
+  },
+  {
+    "name": "Chip Huyen",
+    "url": "https://huyenchip.com/feed.xml",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "llm-craft": 1.5
     },
-    {
-      "name": "Ahead of AI（Sebastian Raschka）",
-      "url": "https://magazine.sebastianraschka.com/feed",
-      "lang": "en",
-      "globalWeight": 1.5,
-      "goalWeights": { "llm-craft": 1.5 },
-      "maxPerWeek": 2,
-      "note": "原理 + 可跑的实现，是「理解」和「会用」之间的桥。"
+    "maxPerWeek": 1,
+    "note": "ML 系统设计。讲工程取舍讲得最扎实的一个，更新慢。",
+    "about": "知名 ML 工程师/作家 Chip Huyen 的博客，ML 系统设计，工程取舍讲得最扎实，权威性高。"
+  },
+  {
+    "name": "Ahead of AI（Sebastian Raschka）",
+    "url": "https://magazine.sebastianraschka.com/feed",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "llm-craft": 1.5
     },
-    {
-      "name": "Import AI（Jack Clark）",
-      "url": "https://importai.substack.com/feed",
-      "lang": "en",
-      "globalWeight": 1.2,
-      "goalWeights": { "llm-craft": 1.2, "cognition": 0.8 },
-      "maxPerWeek": 1,
-      "note": "趋势与政策。密度高，一篇能抵一周的快讯。"
+    "maxPerWeek": 2,
+    "note": "原理 + 可跑的实现，是「理解」和「会用」之间的桥。",
+    "about": "Sebastian Raschka（权威 AI 研究者）的博客，原理+可跑实现，专业可靠。"
+  },
+  {
+    "name": "Import AI（Jack Clark）",
+    "url": "https://importai.substack.com/feed",
+    "lang": "en",
+    "globalWeight": 1.2,
+    "goalWeights": {
+      "llm-craft": 1.2,
+      "cognition": 0.8
     },
-    {
-      "name": "Eugene Yan",
-      "url": "https://eugeneyan.com/rss/",
-      "lang": "en",
-      "globalWeight": 1.2,
-      "goalWeights": { "llm-craft": 1.2 },
-      "maxPerWeek": 1,
-      "note": "ML 系统模式与评测方法。注意：feed 里有 212 条历史存档，首次抓取只取最新的。"
+    "maxPerWeek": 1,
+    "note": "趋势与政策。密度高，一篇能抵一周的快讯。",
+    "about": "Jack Clark（前 OpenAI 成员）的 AI 趋势周报，密度高、业界常引用，权威性高。"
+  },
+  {
+    "name": "Eugene Yan",
+    "url": "https://eugeneyan.com/rss/",
+    "lang": "en",
+    "globalWeight": 1.2,
+    "goalWeights": {
+      "llm-craft": 1.2
     },
-    {
-      "name": "arXiv cs.CL（计算语言学）",
-      "url": "http://export.arxiv.org/rss/cs.CL",
-      "lang": "en",
-      "globalWeight": 1.0,
-      "goalWeights": { "llm-craft": 1.2 },
-      "maxPerWeek": 2,
-      "note": "论文源，噪声极大，完全靠初筛。周末不更新是正常的。"
+    "maxPerWeek": 1,
+    "note": "ML 系统模式与评测方法。注意：feed 里有 212 条历史存档，首次抓取只取最新的。",
+    "about": "资深 ML 工程师 Eugene Yan 的博客，ML 系统模式与评测方法，工程向、专业扎实。"
+  },
+  {
+    "name": "arXiv cs.CL（计算语言学）",
+    "url": "http://export.arxiv.org/rss/cs.CL",
+    "lang": "en",
+    "globalWeight": 1,
+    "goalWeights": {
+      "llm-craft": 1.2
     },
-    {
-      "name": "OpenAI News",
-      "url": "https://openai.com/news/rss.xml",
-      "lang": "en",
-      "globalWeight": 0.8,
-      "goalWeights": { "llm-craft": 1.0 },
-      "maxPerWeek": 2,
-      "bulkFeed": true,
-      "note": "⚠️ 这个 feed 返回 1105 条（全站存档，不是最近更新）。必须按日期取最新再截断，否则会淹掉候选集。官方公告本身信息密度也不高，给低权重。"
+    "maxPerWeek": 2,
+    "note": "论文源，噪声极大，完全靠初筛。周末不更新是正常的。",
+    "about": "学术论文预印本库（arXiv 计算语言学板块），权威学术库，但论文未经同行评审、噪声大，需自行甄别。"
+  },
+  {
+    "name": "OpenAI News",
+    "url": "https://openai.com/news/rss.xml",
+    "lang": "en",
+    "globalWeight": 0.8,
+    "goalWeights": {
+      "llm-craft": 1
     },
-    {
-      "name": "Hugging Face Blog",
-      "url": "https://huggingface.co/blog/feed.xml",
-      "lang": "en",
-      "globalWeight": 0.6,
-      "goalWeights": { "llm-craft": 0.8 },
-      "maxPerWeek": 1,
-      "bulkFeed": true,
-      "note": "⚠️ 返回 834 条存档，同上要截断。内容质量方差极大，从严肃研究到营销贴都有。"
+    "maxPerWeek": 2,
+    "bulkFeed": true,
+    "note": "⚠️ 这个 feed 返回 1105 条（全站存档，不是最近更新）。必须按日期取最新再截断，否则会淹掉候选集。官方公告本身信息密度也不高，给低权重。",
+    "about": "OpenAI 官方公告，第一手信息但带宣传性质，权威但需辨别营销成分。"
+  },
+  {
+    "name": "Hugging Face Blog",
+    "url": "https://huggingface.co/blog/feed.xml",
+    "lang": "en",
+    "globalWeight": 0.6,
+    "goalWeights": {
+      "llm-craft": 0.8
     },
-    {
-      "name": "The Pragmatic Engineer",
-      "url": "https://newsletter.pragmaticengineer.com/feed",
-      "lang": "en",
-      "globalWeight": 0.6,
-      "goalWeights": { "llm-craft": 0.6 },
-      "maxPerWeek": 1,
-      "note": "软件工程实践，和大模型只是偶尔相关，低权重。"
+    "maxPerWeek": 1,
+    "bulkFeed": true,
+    "note": "⚠️ 返回 834 条存档，同上要截断。内容质量方差极大，从严肃研究到营销贴都有。",
+    "about": "Hugging Face 官方博客，模型/工具发布第一手，内容质量方差大（含营销贴），需甄别。"
+  },
+  {
+    "name": "The Pragmatic Engineer",
+    "url": "https://newsletter.pragmaticengineer.com/feed",
+    "lang": "en",
+    "globalWeight": 0.6,
+    "goalWeights": {
+      "llm-craft": 0.6
     },
-
-    {
-      "name": "36氪",
-      "url": "https://36kr.com/feed",
-      "lang": "zh",
-      "globalWeight": 0.4,
-      "goalWeights": { "semiconductor-research": 0.4, "llm-craft": 0.3 },
-      "maxPerWeek": 1,
-      "note": "刻意压低。中文科技媒体信息密度低，留着是为了保证候选集里有中文内容，也给降权机制一个真实演示对象。"
-    }
-  ],
+    "maxPerWeek": 1,
+    "note": "软件工程实践，和大模型只是偶尔相关，低权重。",
+    "about": "Gergely Orosz 的软件工程深度报道，业界权威，权威性高（与大模型关联视主题而定）。"
+  },
+  {
+    "name": "36氪",
+    "url": "https://36kr.com/feed",
+    "lang": "zh",
+    "globalWeight": 0.4,
+    "goalWeights": {
+      "semiconductor-research": 0.4,
+      "llm-craft": 0.3
+    },
+    "maxPerWeek": 1,
+    "note": "刻意压低。中文科技媒体信息密度低，留着是为了保证候选集里有中文内容，也给降权机制一个真实演示对象。",
+    "about": "中文科技创投媒体，覆盖面广但信息密度较低、标题党多，权威性一般，仅作中文补充。"
+  }
+],
 
   "_已探活但剔除": [
     { "url": "https://www.semiinsights.com/feed", "原因": "连接失败" },

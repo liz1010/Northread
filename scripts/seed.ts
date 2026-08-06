@@ -29,6 +29,7 @@ type Seed = {
     fragile?: boolean;
     bulkFeed?: boolean;
     note?: string;
+    about?: string;
     goalWeights?: Record<string, number>;
   }>;
 };
@@ -77,6 +78,7 @@ for (const src of seed.sources) {
     fragile: src.fragile ?? false,
     bulkFeed: src.bulkFeed ?? false,
     note: src.note ?? null,
+    about: src.about ?? null,
   };
 
   const existing = await db.select().from(sources).where(eq(sources.url, src.url)).limit(1);

@@ -100,6 +100,8 @@ export const sources = sqliteTable(
     /** feed 返回全站存档（上千条）的源，抓取时必须按日期截断 */
     bulkFeed: integer("bulk_feed", { mode: "boolean" }).notNull().default(false),
     note: text("note"),
+    /** 面向用户的信源介绍：是什么网站、干什么的、是否权威。展示在推荐卡片上 */
+    about: text("about"),
     lastFetchedAt: integer("last_fetched_at"),
     createdAt: integer("created_at").notNull().default(now),
   },

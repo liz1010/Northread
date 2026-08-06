@@ -23,6 +23,7 @@ type Props = {
   url: string;
   summary: string | null;
   sourceName: string | null;
+  sourceAbout: string | null;
   sourceFragile: boolean | null;
   goalTitle: string;
   nodeTitle: string | null;
@@ -59,6 +60,7 @@ function Meter({ label, v }: { label: string; v: number | null }) {
 export function RecCard(p: Props) {
   const [pending, start] = useTransition();
   const [open, setOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const given = new Set(p.feedback);
 
   const act = (fn: () => Promise<void>) => start(() => void fn());
@@ -111,7 +113,23 @@ export function RecCard(p: Props) {
             {p.sourceName ?? "手动添加"}
             {p.sourceFragile && <span className="ml-1 text-ink-300">（脆弱源）</span>}
             {p.readingMinutes ? ` · ${p.readingMinutes} 分钟` : " · 时长待定"}
+            {p.sourceAbout && (
+              <button
+                onClick={() => setAboutOpen((v) => !v)}
+                title="这是什么信源？"
+                className={`ml-1.5 align-middle text-[11px] leading-none transition ${
+                  aboutOpen ? "text-pine-700" : "text-ink-300 hover:text-pine-700"
+                }`}
+              >
+                ⓘ
+              </button>
+            )}
           </p>
+          {aboutOpen && p.sourceAbout && (
+            <p className="mt-1.5 rounded-lg bg-canvas px-3 py-2 text-xs leading-relaxed text-ink-600">
+              {p.sourceAbout}
+            </p>
+          )}
         </div>
 
         {/* 陶土 3 / 5 —— 目标匹配分 */}

@@ -49,6 +49,7 @@ export async function getTodayRecs(date = todayStr()) {
       readingMinutes: items.readingMinutes,
       lang: items.lang,
       sourceName: sources.name,
+      sourceAbout: sources.about,
       sourceFragile: sources.fragile,
       goalId: goals.id,
       goalTitle: goals.title,
