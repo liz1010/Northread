@@ -63,15 +63,31 @@ async function extractTweetViaOembed(url: string): Promise<ExtractResult | null>
   const m = url.match(/\/status\/(\d+)/);
   if (!m) return null;
   const id = m[1];
-  const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(`https://x.com/i/web/status/${id}`)}`;
+  // oembed 只认 twitter.com/<用户名>/status/<id> 形式（x.com/i/web/status 会 404），
+  // 从原始 URL 里提取用户名（nitter.net/<用户名>/status/<id>）。
+  const u = url.match(/\/([A-Za-z0-9_]{1,15})\/status\//);
+  const user = u ? u[1] : "i/web";
+  let oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(`https://twitter.com/${user}/status/${id}`)}`;
   try {
-    const res = await request(oembedUrl, {
-      dispatcher,
-      headers: { "user-agent": UA, accept: "application/json" },
-      headersTimeout: TIMEOUT_MS,
-      bodyTimeout: TIMEOUT_MS,
-    });
-    if (res.statusCode < 200 || res.statusCode >= 300) return null;
+    // publish.twitter.com 会 301 到 publish.x.com，手动跟随重定向（undici 的
+    // maxRedirections 选项在部分版本不支持）。
+    let res = null;
+    for (let hop = 0; hop <= 5; hop++) {
+      res = await request(oembedUrl, {
+        dispatcher,
+        headers: { "user-agent": UA, accept: "application/json" },
+        headersTimeout: TIMEOUT_MS,
+        bodyTimeout: TIMEOUT_MS,
+      });
+      const loc = res.headers.location;
+      if (res.statusCode >= 300 && res.statusCode < 400 && loc) {
+        await res.body.dump();
+        oembedUrl = new URL(Array.isArray(loc) ? loc[0] : loc, oembedUrl).toString();
+        continue;
+      }
+      break;
+    }
+    if (!res || res.statusCode < 200 || res.statusCode >= 300) return null;
     const json = JSON.parse(await res.body.text()) as {
       author_name?: string;
       html?: string;
