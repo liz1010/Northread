@@ -223,6 +223,24 @@ export async function generateToday(
     if (p) take(p, daily);
   }
 
+  // 保底补足：某些目标第一轮可能因为撞源/周上限/重复而颗粒无收
+  // （实测出现过当天只有 2 条）。用户要求每天至少每个目标 1 条。
+  // 此时放宽「同一个源一天最多一条」，只保留「同篇不重复」+「周上限」，
+  // 从全量 rerank 候选按分数给缺的目标补一条。宁可同源两条，也不能让目标空着。
+  if (daily.length < goalList.length) {
+    const pickedGoals = new Set(daily.map((p) => p.goalId));
+    const byScore = [...picks].sort((a, b) => b.score - a.score);
+    for (const p of byScore) {
+      if (daily.length >= goalList.length) break;
+      if (takenItems.has(p.itemId)) continue;
+      if (pickedGoals.has(p.goalId)) continue; // 每个目标最多补一条
+      const sid = srcIdByItem.get(p.itemId) ?? -1;
+      if ((usage.get(sid) ?? 0) >= MAX_PER_WEEK) continue; // 仍守周上限
+      take(p, daily);
+      pickedGoals.add(p.goalId);
+    }
+  }
+
   // 第二轮：周末的深读包，每个目标最多再加一条。
   //
   // 这一轮**不检查同日撞源**，只保留周上限。理由：深读是额外给的槽位，

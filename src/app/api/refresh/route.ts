@@ -74,26 +74,19 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, busy: true, message: "正在抓取中…" });
   }
 
-  const cmd = [
-    "set -a",
-    ". .env.production",
-    "set +a",
-    `printf 'ingest' > ${STAGE}`,
-    "node scripts/ingest.ts >> /var/log/northread/ingest.log 2>&1",
-    `printf 'recommend' > ${STAGE}`,
-    "node scripts/recommend.ts >> /var/log/northread/recommend.log 2>&1",
-    `rm -f ${STAGE}`,
-    "echo REFRESH_DONE >> /var/log/northread/refresh.log",
-  ].join(" && ");
-
-  // setsid 让任务进入独立会话，完全脱离 Next server 进程，
-  // 避免在 systemd/Next 环境下子进程被回收导致"stage 创建了但 ingest 没跑"。
-  const proc = spawn("setsid", ["/bin/bash", "-c", cmd], {
-    cwd: "/srv/northread",
-    detached: true,
-    stdio: "ignore",
-    env: { ...process.env, PATH: "/usr/local/bin:/usr/bin:/bin" },
-  });
+  // 直接跑独立脚本文件（scripts/refresh.sh）。
+  // 之前用 bash -c 内联命令链，在 setsid 环境下 stage 创建了但 node 没真正跑起来，
+  // 且错误不可见。脚本文件用绝对路径 /usr/bin/node、逐步写日志，可排查。
+  const proc = spawn(
+    "setsid",
+    ["/bin/bash", "/srv/northread/scripts/refresh.sh"],
+    {
+      cwd: "/srv/northread",
+      detached: true,
+      stdio: "ignore",
+      env: { ...process.env, PATH: "/usr/local/bin:/usr/bin:/bin" },
+    },
+  );
   proc.unref();
   proc.on("error", (e) => {
     console.error("[refresh] 启动后台任务失败:", e.message);
