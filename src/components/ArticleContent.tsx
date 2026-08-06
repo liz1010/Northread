@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { originalUrl } from "../lib/urls.ts";
+
 /**
  * 阅读工作台的文章正文。
  *
@@ -94,7 +96,7 @@ export function ArticleContent({
       {error && <p className="mt-1 text-xs text-clay-700">{error}</p>}
       {summary && <p className="mt-2 text-xs leading-relaxed">{summary}</p>}
       <a
-        href={url}
+        href={originalUrl(url)}
         target="_blank"
         rel="noreferrer"
         className="mt-2 inline-block text-xs text-pine-700 underline"

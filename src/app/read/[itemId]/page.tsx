@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArticleContent } from "../../../components/ArticleContent.tsx";
 import { ChatPanel } from "../../../components/ChatPanel.tsx";
 import { getReadingContext } from "../../../lib/queries.ts";
+import { originalUrl } from "../../../lib/urls.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -93,7 +94,7 @@ export default async function ReadPage({ params }: { params: Promise<{ itemId: s
           )}
           {item.url && (
             <a
-              href={item.url}
+              href={originalUrl(item.url)}
               target="_blank"
               rel="noreferrer"
               className="mt-3 inline-block text-xs text-pine-700 underline underline-offset-2 hover:text-pine-900"

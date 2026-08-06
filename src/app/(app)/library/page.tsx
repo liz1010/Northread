@@ -1,5 +1,6 @@
 import { FEEDBACK_KINDS } from "../../../lib/feedback.ts";
 import { getLibrary } from "../../../lib/queries.ts";
+import { originalUrl } from "../../../lib/urls.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,7 @@ export default async function Library() {
               </div>
 
               <h3 className="mt-2 font-serif leading-snug font-semibold">
-                <a href={r.url} target="_blank" rel="noreferrer" className="hover:underline">
+                <a href={originalUrl(r.url)} target="_blank" rel="noreferrer" className="hover:underline">
                   {r.title}
                 </a>
               </h3>

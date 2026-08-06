@@ -5,6 +5,7 @@ import { useState, useTransition } from "react";
 
 import { submitFeedback, setState } from "../app/actions.ts";
 import { FEEDBACK_KINDS, type FeedbackKind } from "../lib/feedback.ts";
+import { originalUrl } from "../lib/urls.ts";
 
 type Score = {
   score: number | null;
@@ -96,7 +97,7 @@ export function RecCard(p: Props) {
             </Link>
             {p.url && (
               <a
-                href={p.url}
+                href={originalUrl(p.url)}
                 target="_blank"
                 rel="noreferrer"
                 title="查看原文"
@@ -206,7 +207,7 @@ export function RecCard(p: Props) {
         </Link>
         {p.url && (
           <a
-            href={p.url}
+            href={originalUrl(p.url)}
             target="_blank"
             rel="noreferrer"
             title="在浏览器打开原文"
