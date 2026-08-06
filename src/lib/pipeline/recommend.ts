@@ -239,6 +239,59 @@ export async function generateToday(
       take(p, daily);
       pickedGoals.add(p.goalId);
     }
+
+    // 仍缺的目标：rerank 完全没给它选候选（模型偶尔漏选目标）。
+    // 从本次 prefilter 的高相关候选直接补一条，保证每天每个目标至少 1 条。
+    const missingGoals = goalList.filter((g) => !pickedGoals.has(g.id));
+    if (missingGoals.length > 0 && preRunId != null) {
+      const fallback = await db
+        .select({
+          itemId: itemGoalScores.itemId,
+          goalId: itemGoalScores.goalId,
+          relevance: itemGoalScores.relevance,
+        })
+        .from(itemGoalScores)
+        .where(
+          and(
+            eq(itemGoalScores.stage, "prefilter"),
+            eq(itemGoalScores.modelRunId, preRunId),
+            inArray(
+              itemGoalScores.goalId,
+              missingGoals.map((g) => g.id),
+            ),
+          ),
+        )
+        .orderBy(desc(itemGoalScores.relevance));
+      for (const g of missingGoals) {
+        if (daily.length >= goalList.length) break;
+        const row = fallback.find(
+          (r) =>
+            r.goalId === g.id &&
+            !takenItems.has(r.itemId) &&
+            (usage.get(srcIdByItem.get(r.itemId) ?? -1) ?? 0) < MAX_PER_WEEK,
+        );
+        if (!row) continue;
+        const cand = byId.get(row.itemId);
+        const pick: (typeof picks)[number] = {
+          itemId: row.itemId,
+          goalId: g.id,
+          nodeId: null,
+          score: Math.round((row.relevance ?? 0) * 100),
+          relevance: row.relevance ?? 0,
+          sourceWeight: cand?.sourceWeight ?? 1,
+          gapFit: 0,
+          novelty: 0,
+          readingCost: 0,
+          reason: "rerank 未选中该目标，由初筛高相关候选兜底",
+          confidence: "medium",
+          readingAdvice: "完整阅读",
+          caveat: null,
+          scaffold: { prereq: [], questions: [], selfCheck: [] },
+        };
+        take(pick, daily);
+        pickedGoals.add(g.id);
+      }
+    }
   }
 
   // 第二轮：周末的深读包，每个目标最多再加一条。
