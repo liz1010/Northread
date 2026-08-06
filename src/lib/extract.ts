@@ -54,6 +54,53 @@ export type ExtractResult =
   | { ok: true; text: string; html: string; wordCount: number; minutes: number }
   | { ok: false; error: string };
 
+/**
+ * nitter 这类前端对数据中心/代理出口经常返回空页面（JS 挑战或限流），
+ * 导致推文正文提取失败。官方 publish.twitter.com oembed 接口稳定可用，
+ * 作为 fallback 拿推文正文（超长推文会被 Twitter 截断，但总比空着强）。
+ */
+async function extractTweetViaOembed(url: string): Promise<ExtractResult | null> {
+  const m = url.match(/\/status\/(\d+)/);
+  if (!m) return null;
+  const id = m[1];
+  const oembedUrl = `https://publish.twitter.com/oembed?url=${encodeURIComponent(`https://x.com/i/web/status/${id}`)}`;
+  try {
+    const res = await request(oembedUrl, {
+      dispatcher,
+      headers: { "user-agent": UA, accept: "application/json" },
+      headersTimeout: TIMEOUT_MS,
+      bodyTimeout: TIMEOUT_MS,
+    });
+    if (res.statusCode < 200 || res.statusCode >= 300) return null;
+    const json = JSON.parse(await res.body.text()) as {
+      author_name?: string;
+      html?: string;
+    };
+    const blockquote = json.html ?? "";
+    if (!blockquote) return null;
+    // oembed 返回 <blockquote><p>推文正文…</p>…footer…</blockquote>，
+    // 用 jsdom + Readability 提取干净文本。
+    const dom = new JSDOM(blockquote, { url });
+    const doc = dom.window.document;
+    const p = doc.querySelector("p");
+    const text = (p?.textContent ?? "").trim();
+    if (text.length < 20) return null;
+    const author = json.author_name ?? "推文作者";
+    const full = `${text}\n\n—— ${author}（经 oembed 抓取，原文见链接）`;
+    const cjkChars = (full.match(/[\u4e00-\u9fff]/g) ?? []).length;
+    const latinWords = full.split(/\s+/).filter(Boolean).length;
+    return {
+      ok: true,
+      text: full,
+      html: `<blockquote class="article-body">${doc.body.innerHTML}</blockquote>`,
+      wordCount: cjkChars + latinWords,
+      minutes: Math.max(1, Math.round(cjkChars / 450 + latinWords / 200)),
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function extractArticleBody(url: string): Promise<ExtractResult> {
   try {
     const html = await getHtml(url);
@@ -62,6 +109,9 @@ export async function extractArticleBody(url: string): Promise<ExtractResult> {
     const text = (article?.textContent ?? "").trim();
 
     if (text.length < MIN_OK_CHARS) {
+      // 推文链接抓取失败时走 oembed fallback
+      const tweet = await extractTweetViaOembed(url);
+      if (tweet) return tweet;
       return { ok: false, error: `提取到的正文太短（${text.length} 字），可能被站点反爬拦截` };
     }
 
