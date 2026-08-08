@@ -10,19 +10,6 @@ const warnings: string[] = [];
 
 const isProd = process.env.NODE_ENV === "production";
 
-// ---- 访问控制 ----
-const pw = process.env.NORTHREAD_PASSWORD;
-const secret = process.env.NORTHREAD_SESSION_SECRET;
-if (isProd) {
-  if (!pw) problems.push("NORTHREAD_PASSWORD 没设——公网上任何人都能读你的目标和阅读记录");
-  if (!secret) problems.push("NORTHREAD_SESSION_SECRET 没设——会话 cookie 无法签名");
-  if (secret && secret.length < 32)
-    problems.push("NORTHREAD_SESSION_SECRET 太短，至少 32 字符：openssl rand -hex 32");
-  if (pw && pw.length < 8) warnings.push("NORTHREAD_PASSWORD 短于 8 位，容易被猜");
-  if (process.env.NORTHREAD_HTTPS !== "1")
-    warnings.push("NORTHREAD_HTTPS 不是 1——cookie 不会带 Secure 标记，装了 HTTPS 后记得改");
-}
-
 // ---- 模型 ----
 if (process.env.NORTHREAD_USE_MOCK === "1") {
   warnings.push("NORTHREAD_USE_MOCK=1：推荐由关键词匹配产生，不是模型判断");

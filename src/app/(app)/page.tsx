@@ -46,23 +46,6 @@ export default async function Today() {
         </div>
       )}
 
-      {failed.length > 0 && (
-        <div className="rounded-lg border border-ink-200 bg-surface p-3 text-xs">
-          <div className="mb-1 font-semibold">有 {failed.length} 个源抓取失败</div>
-          <ul className="space-y-0.5 text-ink-500">
-            {failed.map((f) => (
-              <li key={f.sourceId}>
-                {f.fragile && <span className="text-clay-700">脆弱源 </span>}
-                {f.name}：{f.error}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-1 text-ink-300">
-            这些源今天没有内容进入候选集。不是「今天没有好东西」，是抓不到。
-          </p>
-        </div>
-      )}
-
       {daily.length === 0 ? (
         <div className="rounded-xl border border-dashed border-ink-200 p-8 text-center">
           <p className="text-sm text-ink-500">今天还没有推荐。</p>
@@ -116,6 +99,23 @@ export default async function Today() {
           库存 {inv.total} 条 · 近 7 天 {inv.recent} 条 · 已推荐过 {inv.used} 条
         </p>
       </footer>
+
+      {failed.length > 0 && (
+        <div className="rounded-lg border border-ink-200 bg-surface p-3 text-xs">
+          <div className="mb-1 font-semibold">有 {failed.length} 个源抓取失败</div>
+          <ul className="space-y-0.5 text-ink-500">
+            {failed.map((f) => (
+              <li key={f.sourceId}>
+                {f.fragile && <span className="text-clay-700">脆弱源 </span>}
+                {f.name}：{f.error}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-1 text-ink-300">
+            这些源今天没有内容进入候选集。不是「今天没有好东西」，是抓不到。
+          </p>
+        </div>
+      )}
     </div>
   );
 }

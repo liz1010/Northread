@@ -1,4 +1,5 @@
 import { getGoalsWithNodes } from "../../../lib/queries.ts";
+import { GoalEditor } from "./GoalEditor.tsx";
 
 export const dynamic = "force-dynamic";
 
@@ -26,9 +27,20 @@ export default async function Goals() {
         <section key={g.id} className="rounded-xl border border-ink-200 bg-surface p-5">
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-lg font-semibold">{g.title}</h2>
-            <span className="shrink-0 rounded-full border border-ink-200 px-2 py-0.5 text-xs text-ink-500">
-              {g.status === "active" ? "进行中" : "已暂停"}
-            </span>
+            <div className="flex shrink-0 items-center gap-2">
+              <GoalEditor
+                id={g.id}
+                title={g.title}
+                why={g.why}
+                currentLevel={g.currentLevel}
+                expectedOutput={g.expectedOutput}
+                avoid={g.avoid}
+                status={g.status}
+              />
+              <span className="rounded-full border border-ink-200 px-2 py-0.5 text-xs text-ink-500">
+                {g.status === "active" ? "进行中" : "已暂停"}
+              </span>
+            </div>
           </div>
 
           {g.why && <p className="mt-2 text-sm leading-relaxed text-ink-700">{g.why}</p>}

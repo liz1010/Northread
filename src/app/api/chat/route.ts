@@ -1,7 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-import { COOKIE, verify } from "../../../lib/auth.ts";
 // 注意：不要在这里 import db —— build 收集路由数据时会加载模块顶层，
 // 而 db/index.ts 顶层就 new Database() 连接 SQLite，会触发 SQLITE_BUSY。
 // 所以 db 放在 POST 内部动态 import；schema 只是表定义，可以顶层引入。
@@ -12,9 +11,6 @@ import * as schema from "../../../db/schema.ts";
  *
  * POST /api/chat  body: { itemId, messages: [{role, content}] }
  * 返回 DeepSeek 的 SSE 流（text/event-stream），边生成边返回。
- *
- * 安全：middleware 已经放行 /api，所以这里必须自己校验会话——
- * 未登录一律 401。
  */
 
 export const runtime = "nodejs";
@@ -27,27 +23,9 @@ const MAX_BODY_CHARS = 14000;
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
-function parseCookies(header: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const part of header.split(";")) {
-    const i = part.indexOf("=");
-    if (i > -1) out[part.slice(0, i).trim()] = part.slice(i + 1).trim();
-  }
-  return out;
-}
-
 export async function POST(req: Request) {
   // 动态导入，避免 build 收集路由数据时触发 SQLite 连接
   const { db } = await import("../../../db/index.ts");
-
-  // ---- 会话校验 ----
-  const secret = process.env.NORTHREAD_SESSION_SECRET;
-  if (!secret) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const cookies = parseCookies(req.headers.get("cookie") ?? "");
-  const token = cookies[COOKIE];
-  if (!token || !(await verify(secret, decodeURIComponent(token)))) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
 
   // ---- 解析请求 ----
   let body: { itemId?: unknown; messages?: unknown };

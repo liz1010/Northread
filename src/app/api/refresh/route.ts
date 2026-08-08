@@ -3,8 +3,6 @@ import { spawn } from "node:child_process";
 
 import { NextResponse } from "next/server";
 
-import { COOKIE, verify } from "../../../lib/auth.ts";
-
 /**
  * 一键刷新：重新抓取所有源 + 重新生成今日推荐。
  *
@@ -23,28 +21,8 @@ const STAGE = "/srv/northread/data/.refresh-stage";
 /** stage 文件超过这个时间仍存在 → 视为任务异常中断，前端不再等待 */
 const STALE_MS = 10 * 60 * 1000;
 
-function parseCookies(header: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const part of header.split(";")) {
-    const i = part.indexOf("=");
-    if (i > -1) out[part.slice(0, i).trim()] = part.slice(i + 1).trim();
-  }
-  return out;
-}
-
-async function authorized(req: Request): Promise<boolean> {
-  const secret = process.env.NORTHREAD_SESSION_SECRET;
-  if (!secret) return false;
-  const cookies = parseCookies(req.headers.get("cookie") ?? "");
-  const token = cookies[COOKIE];
-  return !!token && (await verify(secret, decodeURIComponent(token)));
-}
-
 /** 查询抓取状态：running + 当前阶段（ingest / recommend） */
 export async function GET(req: Request) {
-  if (!(await authorized(req))) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
   if (!existsSync(STAGE)) {
     return NextResponse.json({ running: false, stage: null });
   }
@@ -65,10 +43,6 @@ export async function GET(req: Request) {
 
 /** 启动后台抓取 + 推荐 */
 export async function POST(req: Request) {
-  if (!(await authorized(req))) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-
   // 已有任务在跑就不重复启动
   if (existsSync(STAGE)) {
     return NextResponse.json({ ok: true, busy: true, message: "正在抓取中…" });

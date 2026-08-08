@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-import { COOKIE, verify } from "../../../lib/auth.ts";
 import { extractArticleBody } from "../../../lib/extract.ts";
 // 与 /api/chat 同理：不要顶层 import db（build 收集路由数据会触发 SQLite 连接），
 // db 放在请求内动态 import。
@@ -20,24 +19,7 @@ export const dynamic = "force-dynamic";
 
 const { items } = schema;
 
-function parseCookies(header: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const part of header.split(";")) {
-    const i = part.indexOf("=");
-    if (i > -1) out[part.slice(0, i).trim()] = part.slice(i + 1).trim();
-  }
-  return out;
-}
-
 export async function POST(req: Request) {
-  const secret = process.env.NORTHREAD_SESSION_SECRET;
-  if (!secret) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  const cookies = parseCookies(req.headers.get("cookie") ?? "");
-  const token = cookies[COOKIE];
-  if (!token || !(await verify(secret, decodeURIComponent(token)))) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-
   let body: { itemId?: unknown };
   try {
     body = await req.json();
