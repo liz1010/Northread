@@ -293,20 +293,18 @@ export async function generateToday(
     }
   }
 
-  // 工作日补足：用户要求每天 5 条（3 个目标×1 条基础不够）。
+  // 每日补足：用户要求每天 5 条（3 个目标×1 条基础不够）。
   // 从 rerank 候选按分数继续补，允许同源多条（守周上限、不重复同篇），
-  // 直到凑满 5 条或候选耗尽。周末维持「每目标 1 日常 + 1 深读」。
-  if (!weekend) {
-    const DAILY_TARGET = 5;
-    if (daily.length < DAILY_TARGET) {
-      const byScore = [...picks].sort((a, b) => b.score - a.score);
-      for (const p of byScore) {
-        if (daily.length >= DAILY_TARGET) break;
-        if (takenItems.has(p.itemId)) continue;
-        const sid = srcIdByItem.get(p.itemId) ?? -1;
-        if ((usage.get(sid) ?? 0) >= MAX_PER_WEEK) continue;
-        take(p, daily);
-      }
+  // 直到凑满 5 条或候选耗尽。周末另有深读包，不影响日常 5 条。
+  const DAILY_TARGET = 5;
+  if (daily.length < DAILY_TARGET) {
+    const byScore = [...picks].sort((a, b) => b.score - a.score);
+    for (const p of byScore) {
+      if (daily.length >= DAILY_TARGET) break;
+      if (takenItems.has(p.itemId)) continue;
+      const sid = srcIdByItem.get(p.itemId) ?? -1;
+      if ((usage.get(sid) ?? 0) >= MAX_PER_WEEK) continue;
+      take(p, daily);
     }
   }
 
