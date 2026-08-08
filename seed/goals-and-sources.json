@@ -84,7 +84,7 @@
     }
   ],
 
-    "sources": [
+      "sources": [
   {
     "name": "@Phoenixyin13（via nitter）",
     "url": "https://nitter.net/Phoenixyin13/rss",
@@ -464,6 +464,66 @@
     "maxPerWeek": 1,
     "note": "刻意压低。中文科技媒体信息密度低，留着是为了保证候选集里有中文内容，也给降权机制一个真实演示对象。",
     "about": "中文科技创投媒体，覆盖面广但信息密度较低、标题党多，权威性一般，仅作中文补充。"
+  },
+  {
+    "name": "@karpathy（via nitter）",
+    "url": "https://nitter.net/karpathy/rss",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "llm-craft": 1.8
+    },
+    "maxPerWeek": 3,
+    "fragile": true,
+    "note": "Andrej Karpathy。大模型与深度学习教学/实践的标志性推主。"
+  },
+  {
+    "name": "@jeremyphoward（via nitter）",
+    "url": "https://nitter.net/jeremyphoward/rss",
+    "lang": "en",
+    "globalWeight": 1.2,
+    "goalWeights": {
+      "llm-craft": 1.5
+    },
+    "maxPerWeek": 2,
+    "fragile": true,
+    "note": "Jeremy Howard。fast.ai 创始人，ML 实践与教学。"
+  },
+  {
+    "name": "@ScottMAlexander（via nitter）",
+    "url": "https://nitter.net/ScottMAlexander/rss",
+    "lang": "en",
+    "globalWeight": 1.2,
+    "goalWeights": {
+      "cognition": 1.5
+    },
+    "maxPerWeek": 2,
+    "fragile": true,
+    "note": "Scott Alexander。理性与认知方法论，Astral Codex Ten 作者。"
+  },
+  {
+    "name": "@dylan522p（via nitter）",
+    "url": "https://nitter.net/dylan522p/rss",
+    "lang": "en",
+    "globalWeight": 1.5,
+    "goalWeights": {
+      "semiconductor-research": 1.8
+    },
+    "maxPerWeek": 3,
+    "fragile": true,
+    "note": "Dylan Patel。SemiAnalysis 创始人，半导体产业分析。"
+  },
+  {
+    "name": "@IanCutress（via nitter）",
+    "url": "https://nitter.net/IanCutress/rss",
+    "lang": "en",
+    "globalWeight": 1.2,
+    "goalWeights": {
+      "semiconductor-research": 1.5
+    },
+    "maxPerWeek": 2,
+    "fragile": true,
+    "note": "Ian Cutress。芯片评测与半导体技术分析（前 AnandTech）。"
   }
 ],
 

@@ -165,10 +165,9 @@ export async function generateToday(
   const survivors = candidates.filter((c) => keptIds.has(c.id));
 
   // ---- 重排 ----
-  // 工作日每个目标 1 条，周末 2 条（日常 + 深读）。
-  // 多要一条余量：分配时会因为撞源而丢弃一些，没有余量的话
-  // 后面的目标会拿不到候选。
-  const slotsPerGoal = weekend ? 3 : 2;
+  // 工作日每个目标最多 3 条、周末 3 条（日常 + 深读），给足候选余量。
+  // 分配时会因为撞源/周上限丢弃一些，没有余量后面的目标会拿不到候选。
+  const slotsPerGoal = 3;
   const { picks, modelRunId: rerankRunId } = await provider.rerank(goalList, survivors, {
     slotsPerGoal,
   });
@@ -290,6 +289,23 @@ export async function generateToday(
         };
         take(pick, daily);
         pickedGoals.add(g.id);
+      }
+    }
+  }
+
+  // 工作日补足：用户要求每天 5 条（3 个目标×1 条基础不够）。
+  // 从 rerank 候选按分数继续补，允许同源多条（守周上限、不重复同篇），
+  // 直到凑满 5 条或候选耗尽。周末维持「每目标 1 日常 + 1 深读」。
+  if (!weekend) {
+    const DAILY_TARGET = 5;
+    if (daily.length < DAILY_TARGET) {
+      const byScore = [...picks].sort((a, b) => b.score - a.score);
+      for (const p of byScore) {
+        if (daily.length >= DAILY_TARGET) break;
+        if (takenItems.has(p.itemId)) continue;
+        const sid = srcIdByItem.get(p.itemId) ?? -1;
+        if ((usage.get(sid) ?? 0) >= MAX_PER_WEEK) continue;
+        take(p, daily);
       }
     }
   }
